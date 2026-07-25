@@ -279,14 +279,14 @@ body::after{
 <div class="app-layout">
   <button class="sidebar-toggle" id="st" onclick="toggleSidebar()" title="学院列表">🏛️</button>
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">🏛️ 学院导航 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:auto" id="tm"></span></div>
+    <div class="sidebar-header">🏛️ 学院导航 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:auto" id="tm"></span><button onclick="toggleAllColleges()" style="margin-left:8px;font-size:11px;border:1px solid var(--border);background:#fff;padding:3px 10px;border-radius:12px;cursor:pointer;white-space:nowrap" id="expandAllBtn">展开全部</button></div>
     <div class="sidebar-search"><input type="text" placeholder="🔍 搜索专业..." id="qs" oninput="quickFilter()"></div>
     <div id="cl"></div>
   </aside>
   <main class="content" id="mc">
     <div class="welcome-view" id="wv">
       <h2>👋 欢迎使用华水专业认知助手</h2>
-      <p class="welcome-sub">点击左侧学院展开专业列表，或点击下方学院卡片快速浏览</p>
+      <p class="welcome-sub">共收录 <strong style="color:var(--primary)">71个本科专业</strong>，含 <strong style="color:var(--gold-dark)">10个王牌专业</strong> · 左侧已默认展开第一个学院，点击其他学院查看其专业 ⬇️</p>
       <div class="college-grid" id="cg"></div>
     </div>
     <div class="detail-view" id="dv"></div>
@@ -1355,8 +1355,27 @@ document.addEventListener('click',function(e){
 // Init
 renderSidebar();
 renderCollegeGrid();
+// Auto-expand first college so majors are visible
+var firstCollege=document.querySelector('.college-header');
+if(firstCollege) toggleCollege(firstCollege,firstCollege.getAttribute('data-col'));
 handleHash();
 console.log('🌊 华水专业认知助手已就绪 | 共收录 '+MAJORS.length+' 个本科专业 | '+MAJORS.filter(m=>m.fp).length+' 个王牌专业');
+
+function toggleAllColleges(){
+  var allLists=document.querySelectorAll('.major-list');
+  var allHeaders=document.querySelectorAll('.college-header');
+  var anyClosed=document.querySelectorAll('.major-list.show').length < allLists.length;
+  var btn=document.getElementById('expandAllBtn');
+  if(anyClosed){
+    allLists.forEach(function(l){l.classList.add('show')});
+    allHeaders.forEach(function(h){h.classList.add('open')});
+    btn.textContent='收起全部';
+  }else{
+    allLists.forEach(function(l){l.classList.remove('show')});
+    allHeaders.forEach(function(h){h.classList.remove('open')});
+    btn.textContent='展开全部';
+  }
+}
 </script>
 </body>
 </html>
