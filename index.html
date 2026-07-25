@@ -261,9 +261,23 @@ body::after{
   .college-grid{grid-template-columns:1fr}
   .rank-banner{flex-direction:column}
 }
+/* Top banner */
+.top-banner{
+  position:sticky;top:0;z-index:1000;
+  background:linear-gradient(135deg,#ff6b35,#f7931e,#ff6b35);
+  color:#fff;text-align:center;padding:10px 16px;
+  font-size:14px;font-weight:600;letter-spacing:0.5px;
+  box-shadow:0 2px 8px rgba(255,107,53,0.3);
+  animation:bannerPulse 2s infinite;
+}
+@keyframes bannerPulse{0%,100%{box-shadow:0 2px 8px rgba(255,107,53,0.3)}50%{box-shadow:0 4px 20px rgba(255,107,53,0.5)}}
+.top-banner a{color:#fff;text-decoration:underline;font-weight:700}
+.top-banner a:hover{color:#ffe0b2}
+@media(max-width:500px){.top-banner{font-size:12px;padding:8px 12px}}
 </style>
 </head>
 <body>
+<div class="top-banner">💬 有关华水任何问题咨询小鹏学长 <strong>vx: dpxz2025</strong></div>
 <header class="header">
   <h1>🌊 华水专业认知助手</h1>
   <p class="sub">华北水利水电大学 · 选专业不迷茫，一站式了解你的未来</p>
