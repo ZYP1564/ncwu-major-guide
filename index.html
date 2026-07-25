@@ -5,684 +5,309 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>华水专业认知助手 · 华北水利水电大学</title>
 <style>
-/* ========== CSS Reset & Variables ========== */
 :root {
-  --primary: #1a5fb4;
-  --primary-light: #3584e4;
-  --primary-dark: #0d3b7a;
-  --accent: #e74c3c;
-  --accent-light: #fff5f5;
-  --success: #27ae60;
-  --success-light: #e6f9f0;
-  --warning: #f0a030;
-  --warning-light: #fef9f0;
-  --info: #2980b9;
-  --info-light: #eef6fb;
-  --bg: #f0f4f8;
-  --card-bg: #ffffff;
-  --text: #2c3e50;
-  --text-secondary: #5a6c7d;
-  --text-muted: #8899aa;
-  --border: #dde4ed;
-  --border-light: #eef2f7;
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
-  --shadow: 0 2px 12px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-  --radius: 14px;
-  --radius-sm: 8px;
-  --radius-xs: 5px;
-  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-  min-height: 100vh;
-  position: relative;
-}
-
-/* ========== Watermark ========== */
-.watermark {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  overflow: hidden;
-}
-.watermark::before {
-  content: '华水小鹏制作 · 内容仅供参考';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-25deg);
-  font-size: 52px;
-  color: rgba(0,0,0,0.025);
-  white-space: nowrap;
-  font-weight: 700;
-  letter-spacing: 8px;
-}
-
-/* ========== Header ========== */
-.header {
-  background: linear-gradient(135deg, #0a2d5c 0%, var(--primary) 40%, #1e90d0 100%);
-  color: #fff;
-  padding: 32px 20px 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.header::before {
-  content: '';
-  position: absolute;
-  top: -40%; left: -40%;
-  width: 180%; height: 180%;
-  background: radial-gradient(circle at 35% 45%, rgba(255,255,255,0.07) 0%, transparent 55%);
-}
-.header::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 5%;
-  width: 90%; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-}
-.header-content { position: relative; z-index: 1; }
-.header h1 {
-  font-size: clamp(22px, 4vw, 32px);
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-.header .subtitle {
-  font-size: 14px;
-  opacity: 0.85;
-  letter-spacing: 2px;
-}
-.header .badge-row {
-  margin-top: 14px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.header .badge {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-}
-
-/* ========== Container ========== */
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-/* ========== Search Section ========== */
-.search-section {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin-top: -18px;
-  padding: 22px 24px;
-  position: relative;
-  z-index: 10;
-}
-.search-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.search-input-wrap {
-  flex: 1;
-  min-width: 240px;
-  position: relative;
-}
-.search-input-wrap .icon {
-  position: absolute;
-  left: 14px; top: 50%;
-  transform: translateY(-50%);
-  font-size: 18px;
-  color: var(--text-muted);
-  pointer-events: none;
-}
-.search-input {
-  width: 100%;
-  padding: 12px 14px 12px 42px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  transition: var(--transition);
-  background: var(--bg);
-  color: var(--text);
-  outline: none;
-}
-.search-input:focus {
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(53,132,228,0.1);
-  background: #fff;
-}
-.search-input::placeholder { color: var(--text-muted); }
-
-/* Dropdown suggestions */
-.suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-lg);
-  max-height: 320px;
-  overflow-y: auto;
-  z-index: 100;
-  display: none;
-  margin-top: 4px;
-}
-.suggestions.show { display: block; }
-.suggestion-item {
-  padding: 10px 16px;
-  cursor: pointer;
-  font-size: 14px;
-  border-bottom: 1px solid var(--border-light);
-  transition: var(--transition);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.suggestion-item:last-child { border-bottom: none; }
-.suggestion-item:hover, .suggestion-item.active {
-  background: var(--info-light);
-}
-.suggestion-item .name { font-weight: 600; }
-.suggestion-item .meta {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-.suggestion-item .tag {
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  background: var(--primary);
-  color: #fff;
-  white-space: nowrap;
-}
-
-/* ========== Filter Tags ========== */
-.filter-section { margin-top: 16px; }
-.filter-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.filter-tag {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--text-secondary);
-  transition: var(--transition);
-  white-space: nowrap;
-  user-select: none;
-}
-.filter-tag:hover { border-color: var(--primary-light); color: var(--primary); }
-.filter-tag.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-}
-.filter-tag .count {
-  font-size: 11px;
-  margin-left: 4px;
-  opacity: 0.7;
-}
-
-/* ========== College Tags ========== */
-.college-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.college-tag {
-  padding: 5px 12px;
-  border-radius: 16px;
-  font-size: 12px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--text-secondary);
-  transition: var(--transition);
-  user-select: none;
-}
-.college-tag:hover { border-color: var(--info); color: var(--info); }
-.college-tag.active {
-  background: var(--info);
-  color: #fff;
-  border-color: var(--info);
-}
-
-/* ========== Stats Bar ========== */
-.stats-bar {
-  display: flex;
-  gap: 12px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
-.stat-item {
-  flex: 1;
-  min-width: 100px;
-  background: var(--bg);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  text-align: center;
-}
-.stat-item .num {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--primary);
-}
-.stat-item .lbl {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* ========== Result Section ========== */
-.result-section { margin-top: 24px; }
-.no-result {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-muted);
-}
-.no-result .icon { font-size: 56px; margin-bottom: 12px; }
-.no-result p { font-size: 15px; }
-
-/* Major Detail Card */
-.major-detail { display: none; }
-.major-detail.show { display: block; }
-
-/* Info header */
-.major-hero {
-  background: linear-gradient(135deg, #f8faff 0%, #eef3fb 100%);
-  border-radius: var(--radius);
-  padding: 28px 24px;
-  margin-bottom: 18px;
-  border: 1px solid var(--border-light);
-}
-.major-hero .hero-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.major-hero .hero-icon {
-  width: 64px; height: 64px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  color: #fff;
-  flex-shrink: 0;
-}
-.major-hero .hero-info { flex: 1; min-width: 200px; }
-.major-hero .hero-name {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 2px;
-}
-.major-hero .hero-eng {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-}
-.major-hero .hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.hero-tag {
-  padding: 4px 12px;
-  border-radius: 14px;
-  font-size: 12px;
-  font-weight: 500;
-}
-.hero-tag.college { background: #eef2ff; color: #4f5eb0; }
-.hero-tag.campus { background: #fef3e2; color: #b8842d; }
-.hero-tag.degree { background: #e6f9f0; color: #1f8b4c; }
-.hero-tag.years { background: #fce4ec; color: #c0392b; }
-.hero-tag.category { background: #f3e5f5; color: #7b3f8c; }
-
-/* Score bars */
-.score-row {
-  display: flex;
-  gap: 18px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
-.score-item {
-  flex: 1;
-  min-width: 130px;
-  background: #fff;
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  box-shadow: var(--shadow-sm);
-}
-.score-item .score-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.score-item .score-value {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.score-item .score-bar-wrap {
-  height: 6px;
-  background: #eee;
-  border-radius: 3px;
-  overflow: hidden;
-}
-.score-item .score-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.8s ease;
-}
-.score-bar-fill.high { background: var(--success); }
-.score-bar-fill.medium { background: var(--warning); }
-.score-bar-fill.low { background: var(--accent); }
-
-/* Info Cards */
-.info-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-bottom: 16px;
-}
-.info-card {
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 22px 20px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
-  transition: var(--transition);
-}
-.info-card:hover { box-shadow: var(--shadow); }
-.info-card .card-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-.info-card .card-icon.blue { background: #e8f0fe; color: #1a73e8; }
-.info-card .card-icon.green { background: #e6f9f0; color: #27ae60; }
-.info-card .card-icon.orange { background: #fef9f0; color: #f0a030; }
-.info-card .card-icon.red { background: #fde8e8; color: #e74c3c; }
-.info-card .card-icon.purple { background: #f3e5f5; color: #8e44ad; }
-.info-card .card-icon.teal { background: #e0f7fa; color: #00897b; }
-.info-card h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
-  color: var(--text);
-}
-.info-card p, .info-card ul {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-.info-card ul {
-  list-style: none;
-  padding: 0;
-}
-.info-card ul li {
-  padding: 3px 0;
-  padding-left: 16px;
-  position: relative;
-}
-.info-card ul li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: var(--primary-light);
-  font-weight: bold;
-}
-
-/* Full width card */
-.info-card.full-width { grid-column: 1 / -1; }
-
-/* Recommendation badge */
-.rec-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  margin: 4px;
-}
-.rec-badge.yes { background: #e6f9f0; color: #1f8b4c; }
-.rec-badge.maybe { background: #fef9f0; color: #b87a2a; }
-.rec-badge.no { background: #fde8e8; color: #c0392b; }
-
-/* Comparison table */
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin-top: 8px;
-}
-.compare-table th, .compare-table td {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border-light);
-  text-align: left;
-}
-.compare-table th {
-  background: var(--bg);
-  font-weight: 600;
-  color: var(--text-secondary);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.compare-table tr:hover td { background: #fafbfc; }
-
-/* Course tags */
-.course-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 4px;
-}
-.course-tag {
-  background: var(--bg);
-  padding: 5px 12px;
-  border-radius: 14px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-light);
-}
-
-/* ========== CTA Section ========== */
-.cta-section {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  border-radius: var(--radius);
-  padding: 28px 24px;
-  text-align: center;
-  color: #fff;
-  margin-top: 18px;
-}
-.cta-section h3 { font-size: 18px; margin-bottom: 6px; }
-.cta-section p { font-size: 13px; opacity: 0.85; }
-
-/* ========== Footer ========== */
-.footer {
-  text-align: center;
-  padding: 32px 16px 24px;
-  color: var(--text-muted);
-  font-size: 12px;
-  line-height: 1.8;
-}
-.footer .divider {
-  width: 40px; height: 2px;
-  background: var(--border);
-  margin: 0 auto 14px;
-}
-.footer strong { color: var(--text-secondary); }
-
-/* ========== Share btn ========== */
-.share-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  box-shadow: var(--shadow-lg);
-  transition: var(--transition);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.share-fab:hover { background: var(--primary-dark); transform: scale(1.05); }
-
-/* ========== Responsive ========== */
-@media (max-width: 640px) {
-  .header { padding: 22px 14px 18px; }
-  .search-section { padding: 16px; }
-  .search-row { flex-direction: column; }
-  .major-hero .hero-top { flex-direction: column; align-items: center; text-align: center; }
-  .major-hero .hero-tags { justify-content: center; }
-  .score-row { gap: 10px; }
-  .score-item { min-width: 80px; padding: 10px 12px; }
-  .score-item .score-value { font-size: 20px; }
-  .info-cards { grid-template-columns: 1fr; }
-  .filter-tags, .college-tags { gap: 4px; }
-  .filter-tag, .college-tag { font-size: 11px; padding: 4px 10px; }
-  .stats-bar { gap: 8px; }
-  .stat-item { min-width: 70px; padding: 10px; }
-  .stat-item .num { font-size: 18px; }
-  .watermark::before { font-size: 28px; letter-spacing: 4px; }
-}
-
-@media (max-width: 380px) {
-  .header h1 { font-size: 20px; }
-  .major-hero .hero-name { font-size: 20px; }
+  --primary: #1a5fb4; --primary-light: #3584e4; --primary-dark: #0d3b7a;
+  --gold: #d4a017; --gold-light: #fff8e7; --gold-dark: #b8860b;
+  --accent: #e74c3c; --success: #27ae60; --success-light: #e6f9f0;
+  --warning: #f0a030; --warning-light: #fef9f0;
+  --bg: #f0f4f8; --card-bg: #fff; --text: #2c3e50;
+  --text-secondary: #5a6c7d; --text-muted: #8899aa;
+  --border: #dde4ed; --border-light: #eef2f7;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.06); --shadow: 0 2px 12px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+  --radius: 14px; --radius-sm: 8px; --sidebar-w: 300px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh;
+}
+body::after{
+  content:"华水小鹏制作   内容仅供参考";
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);
+  font-size:48px;color:rgba(0,0,0,.025);white-space:nowrap;
+  font-weight:700;letter-spacing:6px;pointer-events:none;z-index:9999;
+}
+.header{
+  background:linear-gradient(135deg,#0a2d5c 0%,var(--primary) 40%,#1e90d0 100%);
+  color:#fff;padding:16px 24px;text-align:center;position:relative;z-index:10;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+.header h1{font-size:clamp(20px,3.5vw,28px);font-weight:700;letter-spacing:1px}
+.header .sub{font-size:13px;opacity:.85;margin-top:4px}
+.header .badges{margin-top:8px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.header .badge{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);
+  padding:4px 14px;border-radius:20px;font-size:12px;
+}
+.app-layout{display:flex;min-height:calc(100vh - 120px);max-width:1400px;margin:0 auto}
+.sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);background:#fff;
+  border-right:1px solid var(--border);overflow-y:auto;
+  max-height:calc(100vh - 120px);position:sticky;top:0;z-index:5;box-shadow:var(--shadow-sm);
+}
+.sidebar-header{
+  padding:16px 18px;font-weight:700;font-size:15px;color:var(--primary-dark);
+  border-bottom:2px solid var(--primary);background:var(--bg);
+  display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:2;
+}
+.sidebar-search{
+  padding:10px 14px;border-bottom:1px solid var(--border-light);
+  position:sticky;top:50px;background:#fff;z-index:1;
+}
+.sidebar-search input{
+  width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:20px;
+  font-size:13px;outline:none;transition:var(--transition);background:var(--bg);
+}
+.sidebar-search input:focus{border-color:var(--primary-light)}
+.college-item{border-bottom:1px solid var(--border-light)}
+.college-header{
+  padding:12px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;
+  transition:var(--transition);user-select:none;font-size:14px;font-weight:600;
+  justify-content:space-between;
+}
+.college-header:hover{background:var(--bg)}
+.college-header .cn{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.college-header .cn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.college-header .cm{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.college-header .mc{font-size:11px;color:var(--text-muted);font-weight:400}
+.college-header .fd{
+  width:8px;height:8px;border-radius:50%;background:var(--gold);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.college-header .ar{font-size:10px;color:var(--text-muted);transition:var(--transition)}
+.college-header.open .ar{transform:rotate(180deg)}
+.major-list{display:none;background:var(--bg)}
+.major-list.show{display:block}
+.major-item{
+  padding:10px 18px 10px 42px;cursor:pointer;font-size:13px;
+  border-top:1px solid var(--border-light);transition:var(--transition);
+  display:flex;align-items:center;gap:8px;justify-content:space-between;
+}
+.major-item:hover{background:#e8f0fe}
+.major-item.active{background:var(--primary);color:#fff}
+.major-item .mn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.major-item .mb{display:flex;gap:4px;flex-shrink:0}
+.mrb{
+  font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;
+}
+.mrb.gold{background:var(--gold);color:#fff}
+.mrb.orange{background:#fff3e0;color:#e65100}
+.mrb.yellow{background:#ffe082;color:#b8860b}
+.mrb.blue{background:#e8f0fe;color:var(--primary)}
+.content{flex:1;padding:20px 24px;overflow-y:auto}
+.welcome-view h2{font-size:20px;margin-bottom:6px;color:var(--primary-dark)}
+.welcome-sub{font-size:14px;color:var(--text-muted);margin-bottom:20px}
+.college-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;
+}
+.college-card{
+  background:#fff;border-radius:var(--radius);padding:20px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border-light);
+  cursor:pointer;transition:var(--transition);
+}
+.college-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:var(--primary-light)}
+.college-card .cci{font-size:34px;margin-bottom:8px}
+.college-card .ccn{font-size:16px;font-weight:700;margin-bottom:4px}
+.college-card .ccd{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.college-card .ccf{font-size:11px;color:var(--gold-dark);font-weight:600}
+.detail-view{display:none}
+.detail-view.show{display:block}
+.detail-back{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 16px;
+  border-radius:20px;border:1px solid var(--border);background:#fff;
+  cursor:pointer;font-size:13px;color:var(--text-secondary);margin-bottom:16px;
+  transition:var(--transition);
+}
+.detail-back:hover{background:var(--bg);border-color:var(--primary-light);color:var(--primary)}
+.major-hero{
+  background:linear-gradient(135deg,#f8faff 0%,#eef3fb 100%);
+  border-radius:var(--radius);padding:26px 22px;margin-bottom:16px;
+  border:1px solid var(--border-light);
+}
+.hero-top{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.hero-icon{
+  width:66px;height:66px;border-radius:18px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;color:#fff;flex-shrink:0;
+}
+.hero-info{flex:1;min-width:200px}
+.hero-name{font-size:26px;font-weight:700;color:var(--primary-dark);margin-bottom:2px}
+.hero-college{font-size:14px;color:var(--text-secondary);margin-bottom:6px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:6px}
+.hero-tag{padding:3px 10px;border-radius:14px;font-size:11px;font-weight:500}
+.hero-tag.college{background:#eef2ff;color:#4f5eb0}
+.hero-tag.campus{background:#fef3e2;color:#b8842d}
+.hero-tag.degree{background:#e6f9f0;color:#1f8b4c}
+.hero-tag.years{background:#fce4ec;color:#c0392b}
+.hero-tag.category{background:#f3e5f5;color:#7b3f8c}
+.rank-banner{margin-top:16px;display:flex;gap:14px;flex-wrap:wrap}
+.rank-card{
+  flex:1;min-width:130px;border-radius:var(--radius-sm);padding:14px 16px;
+  text-align:center;border:2px solid var(--border-light);
+}
+.rank-card.flagship-card{
+  background:linear-gradient(135deg,var(--gold-light),#fffdf0);
+  border-color:var(--gold);
+}
+.rank-card .rn{font-size:30px;font-weight:800}
+.rank-card .rn.gold{color:var(--gold-dark)}
+.rank-card .rn.blue{color:var(--primary)}
+.rank-card .rl{font-size:11px;color:var(--text-muted);margin-top:2px}
+.rank-card .rd{font-size:12px;color:var(--text-secondary);margin-top:4px}
+.score-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.score-item{
+  flex:1;min-width:120px;background:#fff;border-radius:var(--radius-sm);
+  padding:14px 16px;box-shadow:var(--shadow-sm);
+}
+.score-item .sl{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.score-item .sv{font-size:22px;font-weight:700;margin-bottom:4px}
+.score-item .sb{height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.score-item .sbf{height:100%;border-radius:3px;transition:width .8s ease}
+.sbf.hi{background:var(--success)}.sbf.mid{background:var(--warning)}.sbf.lo{background:var(--accent)}
+.info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-bottom:14px}
+.info-card{
+  background:#fff;border-radius:var(--radius);padding:20px 18px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border-light);
+}
+.info-card:hover{box-shadow:var(--shadow)}
+.info-card.fw{grid-column:1/-1}
+.info-card .ci{
+  width:38px;height:38px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;margin-bottom:10px;
+}
+.ci.blue{background:#e8f0fe;color:#1a73e8}.ci.green{background:#e6f9f0;color:#27ae60}
+.ci.orange{background:#fef9f0;color:#f0a030}.ci.red{background:#fde8e8;color:#e74c3c}
+.ci.purple{background:#f3e5f5;color:#8e44ad}.ci.teal{background:#e0f7fa;color:#00897b}
+.info-card h3{font-size:15px;margin-bottom:8px;color:var(--text)}
+.info-card p,.info-card ul{font-size:14px;color:var(--text-secondary);line-height:1.8}
+.info-card ul{list-style:none;padding:0}
+.info-card ul li{padding:3px 0 3px 16px;position:relative}
+.info-card ul li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--primary-light)}
+.work-viz{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+.work-viz-item{
+  flex:1;min-width:70px;text-align:center;padding:10px;border-radius:var(--radius-sm);
+  background:var(--bg);
+}
+.work-viz-item .wvi{font-size:20px;margin-bottom:2px}
+.work-viz-item .wvl{font-size:10px;color:var(--text-muted)}
+.work-viz-item .wvb{height:4px;background:#ddd;border-radius:2px;margin-top:4px;overflow:hidden}
+.work-viz-item .wvf{height:100%;border-radius:2px}
+.wvf.indoor{background:var(--primary-light)}
+.wvf.outdoor{background:var(--accent)}
+.wvf.field{background:var(--warning)}
+.course-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.course-tag{
+  background:var(--bg);padding:5px 12px;border-radius:14px;font-size:12px;
+  color:var(--text-secondary);border:1px solid var(--border-light);
+}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.compare-table th,.compare-table td{padding:8px 12px;border-bottom:1px solid var(--border-light);text-align:left}
+.compare-table th{background:var(--bg);font-weight:600;color:var(--text-secondary);font-size:11px}
+.compare-table tr:hover td{background:#fafbfc}
+.grad-badge{display:inline-block;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.grad-badge.must{background:#fde8e8;color:#c0392b}
+.grad-badge.rec{background:#fef9f0;color:#b87a2a}
+.grad-badge.opt{background:#e6f9f0;color:#1f8b4c}
+.badge-flagship{
+  display:inline-flex;align-items:center;gap:4px;padding:5px 14px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:#fff;border-radius:20px;font-size:13px;font-weight:700;
+  box-shadow:0 2px 8px rgba(212,160,23,.3);
+}
+.cta-section{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  border-radius:var(--radius);padding:22px;text-align:center;color:#fff;margin-top:14px;
+}
+.cta-section h3{font-size:16px;margin-bottom:4px}
+.cta-section p{font-size:12px;opacity:.85}
+.footer{text-align:center;padding:24px 16px;color:var(--text-muted);font-size:12px;line-height:1.8}
+.footer .divider{width:40px;height:2px;background:var(--border);margin:0 auto 12px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty-state .icon{font-size:64px;margin-bottom:14px}
+.empty-state h3{font-size:18px;color:var(--text-secondary);margin-bottom:6px}
+.share-fab{
+  position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;
+  background:var(--primary);color:#fff;border:none;cursor:pointer;font-size:20px;
+  box-shadow:var(--shadow-lg);transition:var(--transition);z-index:100;
+  display:flex;align-items:center;justify-content:center;
+}
+.share-fab:hover{background:var(--primary-dark);transform:scale(1.05)}
+.sidebar-toggle{
+  display:none;position:fixed;bottom:80px;left:16px;width:44px;height:44px;
+  border-radius:50%;background:var(--primary);color:#fff;border:none;
+  font-size:18px;z-index:101;cursor:pointer;box-shadow:var(--shadow-lg);
+  align-items:center;justify-content:center;
+}
+@media(max-width:900px){
+  .sidebar{position:fixed;left:-320px;top:0;height:100vh;z-index:50;transition:left .3s ease}
+  .sidebar.open{left:0}
+  .sidebar-toggle{display:flex}
+  .content{padding:16px}
+  .info-cards{grid-template-columns:1fr}
+  .hero-top{flex-direction:column;align-items:center;text-align:center}
+  .hero-tags{justify-content:center}
+}
+@media(max-width:500px){
+  .header{padding:12px 14px}
+  .header h1{font-size:18px}
+  .hero-name{font-size:20px}
+  .score-row{gap:8px}
+  .score-item{padding:10px;min-width:80px}
+  .score-item .sv{font-size:18px}
+  .college-grid{grid-template-columns:1fr}
+  .rank-banner{flex-direction:column}
 }
 </style>
 </head>
 <body>
-
-<!-- Watermark -->
-<div class="watermark"></div>
-
-<!-- Header -->
 <header class="header">
-  <div class="header-content">
-    <h1>🌊 华水专业认知助手</h1>
-    <p class="subtitle">华北水利水电大学 · 帮你了解你的专业</p>
-    <div class="badge-row">
-      <span class="badge">📊 真实录取数据</span>
-      <span class="badge">📈 官方就业报告</span>
-      <span class="badge">🎓 考研保研分析</span>
-      <span class="badge">💰 薪资前景解读</span>
-    </div>
+  <h1>🌊 华水专业认知助手</h1>
+  <p class="sub">华北水利水电大学 · 选专业不迷茫，一站式了解你的未来</p>
+  <div class="badges">
+    <span class="badge">🏆 王牌专业标注</span>
+    <span class="badge">📊 全国排名数据</span>
+    <span class="badge">📈 真实就业报告</span>
+    <span class="badge">🏢 工作环境详解</span>
+    <span class="badge">🎓 考研保研分析</span>
+    <span class="badge">💰 薪资成长路径</span>
   </div>
 </header>
-
-<div class="container">
-  <!-- Search Section -->
-  <section class="search-section" id="searchSection">
-    <div class="search-row">
-      <div class="search-input-wrap">
-        <span class="icon">🔍</span>
-        <input type="text" class="search-input" id="searchInput"
-               placeholder="输入你的专业名称，比如：水利水电工程、计算机科学与技术…"
-               autocomplete="off">
-        <div class="suggestions" id="suggestions"></div>
-      </div>
+<div class="app-layout">
+  <button class="sidebar-toggle" id="st" onclick="toggleSidebar()" title="学院列表">🏛️</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">🏛️ 学院导航 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:auto" id="tm"></span></div>
+    <div class="sidebar-search"><input type="text" placeholder="🔍 搜索专业..." id="qs" oninput="quickFilter()"></div>
+    <div id="cl"></div>
+  </aside>
+  <main class="content" id="mc">
+    <div class="welcome-view" id="wv">
+      <h2>👋 欢迎使用华水专业认知助手</h2>
+      <p class="welcome-sub">点击左侧学院展开专业列表，或点击下方学院卡片快速浏览</p>
+      <div class="college-grid" id="cg"></div>
     </div>
-
-    <!-- Category filter -->
-    <div class="filter-section">
-      <div class="filter-label">📂 学科门类</div>
-      <div class="filter-tags" id="categoryTags"></div>
+    <div class="detail-view" id="dv"></div>
+    <div class="cta-section">
+      <h3>💡 温馨提示</h3>
+      <p>以上内容基于华北水利水电大学官方就业质量报告、本科教学质量报告及招生办数据整理<br>每位同学情况不同，数据仅供参考，请结合自身兴趣和实际情况做决策</p>
     </div>
-
-    <!-- College filter -->
-    <div class="filter-section">
-      <div class="filter-label">🏛️ 学院</div>
-      <div class="college-tags" id="collegeTags"></div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-bar" id="statsBar"></div>
-  </section>
-
-  <!-- Result Section -->
-  <section class="result-section" id="resultSection">
-    <div class="no-result" id="noResult">
-      <div class="icon">📚</div>
-      <p>在上方搜索框输入你的专业名称<br>或选择学院/学科门类筛选</p>
-    </div>
-    <div class="major-detail" id="majorDetail"></div>
-  </section>
-
-  <!-- CTA -->
-  <div class="cta-section">
-    <h3>💡 温馨提示</h3>
-    <p>以上内容基于华北水利水电大学官方就业质量报告、本科教学质量报告及招生办数据整理<br>每位同学的情况不同，数据仅供参考，请结合自身兴趣和实际情况做决策</p>
-  </div>
+  </main>
 </div>
-
-<!-- Footer -->
 <footer class="footer">
   <div class="divider"></div>
   <p><strong>华水小鹏制作 · 内容仅供参考</strong></p>
-  <p>数据来源：华北水利水电大学2024届毕业生就业质量年度报告 | 2023-2024学年本科教学质量报告 | 教务处转专业政策文件</p>
-  <p>© 2026 NCWU Major Guide · 非官方学生项目 · 请以学校官方信息为准</p>
+  <p>数据来源: 华北水利水电大学2024届毕业生就业质量年度报告 | 本科教学质量报告 | 教务处转专业政策文件</p>
+  <p>&copy; 2026 NCWU Major Guide · 非官方学生项目 · 请以学校官方信息为准</p>
 </footer>
-
-<!-- Share button -->
-<button class="share-fab" id="shareFab" title="分享给同学" onclick="sharePage()">📤</button>
-
+<button class="share-fab" onclick="sharePage()" title="分享给同学">📤</button>
 <script>
-// ==================== MAJOR DATABASE ====================
-const MAJORS = [
+const MAJORS=[
+
   // ========== 水利学院 (龙子湖校区) ==========
-  {id:"slsd",n:"水利水电工程",c:"水利学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:79,sa:6500,gr:"35%",pr:"3.56%",grd:"建议考研深造以进入设计院/科研单位",ge:"🏗️ 工地+办公室混合",icon:"🌊",
+  {id:"slsd",n:"水利水电工程",c:"水利学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:79,sa:6500,gr:"35%",pr:"3.56%",grd:"建议考研深造以进入设计院/科研单位",ge:"🏗️ 工地+办公室混合",icon:"🌊",rk:11,fp:true,rkNote:"六星级专业 6★ | 全国第11位 | 华水标志性王牌",
    career:"毕业生主要进入中国水利水电建设集团、各流域水利委员会、省市级水利勘测设计院等国有企事业单位。从事水利水电工程的勘测、规划、设计、施工和管理工作。对口就业率高达91%，人均可获3个央企offer，是华水就业质量最高的专业之一。",
    suit:"适合物理和数学基础较好、对水工建筑和水利工程感兴趣的同学。需要具备较强的空间想象能力和工程思维。能接受偶尔的野外勘测和工程现场工作。做事严谨、有责任心、喜欢解决实际工程问题。",
    emp:"2024届毕业去向落实率79%（受行业周期性波动影响）。国企签约率约46%，主要去向为水利系统央企和各省水利设计院。近五年就业领域从传统水利向'水利+生态''水利+智慧化'拓展。行业稳定性强，属于国民经济基础设施领域，受经济周期影响较小。",
@@ -692,7 +317,7 @@ const MAJORS = [
    transfer:"水利水电是华水王牌专业（全国排名第11位，六星级专业6★），建议慎重考虑转出。若确实不喜欢工程现场工作，可考虑转入计算机、电气工程等专业。若想留在水利领域但不想下工地，可考虑转入水文与水资源工程（偏向数据分析和室内工作）。",
    courses:["水力学","工程水文学","水工建筑物","水利工程施工","水电站","水资源规划与管理","结构力学","土力学","钢筋混凝土结构","工程地质"]
   },
-  {id:"gwgc",n:"港口航道与海岸工程",c:"水利学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:77,sa:6200,gr:"30%",pr:"3.56%",grd:"建议考研提升竞争力",ge:"🏗️ 工地+办公室混合",icon:"🚢",
+  {id:"gwgc",n:"港口航道与海岸工程",c:"水利学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:77,sa:6200,gr:"30%",pr:"3.56%",grd:"建议考研提升竞争力",ge:"🏗️ 工地+办公室混合",icon:"🚢",rk:11,fp:false,rkNote:"全国第11位 | 行业特色鲜明",
    career:"毕业生进入中交集团、中国港湾、各大港口集团、航道局等单位。从事港口、航道、海岸工程的设计、施工和管理。随着国家'一带一路'和海洋强国战略推进，港口航道人才需求稳步增长。",
    suit:"适合对海洋工程、港口建设感兴趣的同学。数学力学基础要好，能适应沿海地区工作。对船舶、海洋、水运有一定热情。",
    emp:"2024届落实率77%。行业集中在中交系统（约50%）和各沿海港口集团。受国际贸易和基建投资影响较大，但长期趋势向好。全国排名第11位，行业内认可度高。",
@@ -702,7 +327,7 @@ const MAJORS = [
    transfer:"全国排名第11位，行业特色鲜明。若不喜欢沿海或海外工作，可转水利水电工程（内陆就业面更广）或土木工程。",
    courses:["海岸动力学","港口规划与布置","港口水工建筑物","航道工程","海岸工程","水力学","土力学","结构力学"]
   },
-  {id:"zhsl",n:"智慧水利",c:"水利学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:80,sa:6800,gr:"28%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内+少量现场",icon:"🤖",
+  {id:"zhsl",n:"智慧水利",c:"水利学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:80,sa:6800,gr:"28%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内+少量现场",icon:"🤖",rk:9,fp:false,rkNote:"全国第9位 | 新兴交叉专业",
    career:"全国第9位的新兴交叉专业。融合水利工程与人工智能、大数据、物联网技术。毕业生可进入智慧水利建设企业、水利信息化公司、水利管理部门的技术岗位。目前国家大力推广数字孪生流域建设，人才缺口大。",
    suit:"适合既对水利有兴趣又喜欢计算机技术的同学。需要编程基础和数据分析能力。喜欢用新技术改造传统行业的创新者。",
    emp:"新兴专业，首几届毕业生就业数据有限。但因国家数字孪生水利战略推动，就业前景看好。预计可在水利信息化企业、设计院数字化部门、水利厅局信息中心等就业。",
@@ -714,7 +339,7 @@ const MAJORS = [
   },
 
   // ========== 水资源学院 (龙子湖校区) ==========
-  {id:"swzy",n:"水文与水资源工程",c:"水资源学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:83,sa:6000,gr:"32%",pr:"3.56%",grd:"建议考研进入省级以上水文部门",ge:"💻 办公室+野外监测",icon:"💧",
+  {id:"swzy",n:"水文与水资源工程",c:"水资源学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:83,sa:6000,gr:"32%",pr:"3.56%",grd:"建议考研进入省级以上水文部门",ge:"💻 办公室+野外监测",icon:"💧",rk:16,fp:true,rkNote:"全国第16位 | 水利特色优势专业",
    career:"全国排名第16位的优势专业。毕业生进入水文局、水利厅、环保部门、大型水库管理单位等。从事水文监测、水资源评价、防洪调度、水环境保护等工作。近年考公考编上岸率较高。",
    suit:"适合对水资源管理、水文数据分析和环境保护感兴趣的同学。需要细心和数据处理能力。相比水利水电工程，野外工作较少，更适合偏向室内分析的同学。",
    emp:"2024届落实率83%（华水优势专业之一）。主要去向：水文水资源局系统（约35%）、环保部门、水利设计院。近年由于国家对水安全和生态文明建设的重视，行业需求稳步上升。",
@@ -724,7 +349,7 @@ const MAJORS = [
    transfer:"就业稳定、事业单位机会多。若想更高薪资可考虑转计算机（水利信息化方向契合度高）或水利水电工程。",
    courses:["水文学原理","水文预报","水资源规划与管理","水环境保护","水文统计","地下水文学","水文测验","GIS应用"]
   },
-  {id:"swgc",n:"水务工程",c:"水资源学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:76,sa:5800,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室为主",icon:"🏙️",
+  {id:"swgc",n:"水务工程",c:"水资源学院",ca:"龙子湖校区",y:"四年",d:"工学学士",cat:"工学",er:76,sa:5800,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室为主",icon:"🏙️",rk:3,fp:true,rkNote:"全国第3位 🏆 | 华水顶尖王牌专业",
    career:"全国排名第3位的王牌专业！毕业生进入水务集团、市政设计院、水利局、环保公司等。从事城市给排水系统规划、水资源配置、水环境治理、海绵城市建设等工作。随着城市化进程和海绵城市建设，专业需求快速增长。",
    suit:"适合对城市水资源管理、市政工程感兴趣的同学。相比传统水利，更偏向城市和市政方向。喜欢规划和管理类工作的同学。",
    emp:"全国排名第3，专业认可度极高。就业方向：各城市水务集团、市政设计院、环保企业。海绵城市建设带来大量就业机会。",
@@ -736,7 +361,7 @@ const MAJORS = [
   },
 
   // ========== 土木与交通学院 (花园校区) ==========
-  {id:"tmgc",n:"土木工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:82,sa:7500,gr:"27%",pr:"3.56%",grd:"建议考研进入设计院/甲方",ge:"🏗️ 工地为主",icon:"🏗️",
+  {id:"tmgc",n:"土木工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:82,sa:7500,gr:"27%",pr:"3.56%",grd:"建议考研进入设计院/甲方",ge:"🏗️ 工地为主",icon:"🏗️",rk:null,fp:false,rkNote:null,
    career:"毕业生进入中建、中铁、中交等大型央企，以及各省建工集团、房地产企业、设计院等。从事建筑工程、岩土工程、道路桥梁的设计、施工和管理工作。考取一级建造师、结构工程师等证书对职业发展至关重要。",
    suit:"适合数学力学基础扎实、能吃苦耐劳的同学。需要较强的组织协调能力和抗压能力。愿意从工地基层做起，逐步成长为项目经理。不适合对工作环境要求高、不愿经常出差或驻工地的同学。",
    emp:"2024届落实率82%（道桥方向91%，建工方向82%，岩土方向81%）。国企就业为主（约55%），是华水就业率较高的工科专业。受房地产行业调整影响，住宅建设方向需求下降，但基建（交通、水利、市政）方向依然稳健。",
@@ -746,7 +371,7 @@ const MAJORS = [
    transfer:"就业率高但工作环境艰苦。若不能接受工地生活，建议尽早考虑转专业（大一有转专业机会）。可转入：工程造价（偏办公室）、计算机（薪资更高但竞争大）、电气工程（电网稳定）。若喜欢基建行业但不想下工地，转工程管理或工程造价。",
    courses:["结构力学","混凝土结构","钢结构","土力学与地基基础","土木工程施工","工程结构抗震","BIM技术","土木工程材料"]
   },
-  {id:"dlql",n:"道路桥梁与渡河工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:91,sa:8923,gr:"25%",pr:"3.56%",grd:"本科就业率高，考研可选",ge:"🏗️ 工地+野外",icon:"🌉",
+  {id:"dlql",n:"道路桥梁与渡河工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:91,sa:8923,gr:"25%",pr:"3.56%",grd:"本科就业率高，考研可选",ge:"🏗️ 工地+野外",icon:"🌉",rk:null,fp:false,rkNote:"全校最高起薪 8923元/月",
    career:"毕业生主要进入中交、中铁、中铁建、各省路桥集团等大型央企。从事公路、桥梁、隧道工程的勘测、设计、施工和管理。国家基建投资持续加大，尤其是'交通强国'战略带来大量高速公路、高铁、城市轨道交通项目。",
    suit:"适合对大型基础设施（桥梁、隧道、高速公路）建设有热情的同学。数学力学基础好，动手能力强。能接受长期驻外（项目部可能在山丘、河谷等偏远地区）。身体素质好，不恐高。",
    emp:"2024届落实率91%！华水就业率最高的专业之一。平均薪资8923元/月也是全校最高。中交系统为主要雇主，国企就业率超过60%。受国家基建投资拉动，中长期就业前景稳健。",
@@ -756,7 +381,7 @@ const MAJORS = [
    transfer:"薪资全校最高但工作环境最艰苦。若能吃苦可留，否则建议大一申请转到土木其他方向或工程管理。女生慎重考虑。",
    courses:["道路勘测设计","桥梁工程","隧道工程","路基路面工程","结构力学","桥梁抗震","预应力混凝土","基础工程"]
   },
-  {id:"jtgc",n:"交通工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:77,sa:6000,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室+现场",icon:"🚦",
+  {id:"jtgc",n:"交通工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:77,sa:6000,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室+现场",icon:"🚦",rk:null,fp:false,rkNote:null,
    career:"毕业生进入交通规划设计院、交通管理部门、城市轨道交通公司等。从事交通规划、交通工程设计、交通管理与控制、智能交通系统开发等工作。",
    suit:"适合对交通系统规划、城市交通问题有研究兴趣的同学。需要一定的数学和计算机基础。喜欢系统性思维和数据分析。",
    emp:"2024届落实率77%。行业分布在交通规划设计院、交管部门、城轨公司。随着智慧城市和智能交通发展，就业面拓宽。",
@@ -766,7 +391,7 @@ const MAJORS = [
    transfer:"若对交通不感兴趣可转土木工程、计算机。",
    courses:["交通工程学","交通规划","交通设计","智能交通系统","交通仿真","道路工程","运筹学"]
   },
-  {id:"csdxkj",n:"城市地下空间工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:75,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"🏗️ 地下/隧道",icon:"🕳️",
+  {id:"csdxkj",n:"城市地下空间工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:75,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"🏗️ 地下/隧道",icon:"🕳️",rk:null,fp:false,rkNote:null,
    career:"毕业生从事城市地铁、地下综合管廊、地下商业空间、人防工程的设计与施工。随着城市轨道交通和地下空间开发加速，人才需求看涨。",
    suit:"对地下工程、隧道建设感兴趣。能接受地下施工环境。数学力学基础扎实。",
    emp:"主要去向：中铁系统（地铁建设）、市政设计院。城市轨道交通快速发展带来机遇。",
@@ -776,7 +401,7 @@ const MAJORS = [
    transfer:"可转土木工程、道路桥梁、智能建造。",
    courses:["地下空间规划","隧道工程","基坑工程","岩石力学","地下结构设计","地铁与轻轨"]
   },
-  {id:"znjz",n:"智能建造",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:82,sa:7000,gr:"25%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内+现场",icon:"🏗️🤖",
+  {id:"znjz",n:"智能建造",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:82,sa:7000,gr:"25%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内+现场",icon:"🏗️🤖",rk:null,fp:false,rkNote:"2024年新设专业",
    career:"2024年新设专业。融合土木工程与人工智能、BIM、装配式建筑、建筑机器人等技术。毕业生可进入智能建造企业、装配式建筑公司、建筑科技公司等。建筑业数字化转型是大趋势，人才稀缺。",
    suit:"既喜欢建筑工程又对新技术（AI、BIM、机器人、3D打印）感兴趣的同学。有编程基础更好。喜欢推动行业变革的创新者。",
    emp:"新专业无历史就业数据，但可参考土木工程就业情况（82%落实率）+ 建筑信息化方向溢价。预计就业竞争力强于传统土木。",
@@ -788,7 +413,7 @@ const MAJORS = [
   },
 
   // ========== 电气工程学院 (花园校区) ==========
-  {id:"dqgc",n:"电气工程及其自动化",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6800,gr:"30%",pr:"3.56%",grd:"建议考研进入市局电网",ge:"💻 室内+变电站",icon:"⚡",
+  {id:"dqgc",n:"电气工程及其自动化",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6800,gr:"30%",pr:"3.56%",grd:"建议考研进入市局电网",ge:"💻 室内+变电站",icon:"⚡",rk:null,fp:true,rkNote:"华水就业质量标杆 | 96.8%入职国家电网",
    career:"华水就业质量最高的专业之一！约96.8%毕业生入职国家电网（含各省市电力公司）、南方电网等电力系统国企。主要从事电力系统运维、变电检修、电力调度、电力营销等。电力行业是国民经济命脉，就业极为稳定。",
    suit:"适合物理（电磁学）基础好、对电力系统感兴趣的同学。做事认真细致、安全意识强。追求稳定职业、有保障的福利待遇。能接受倒班（变电站值班）或户外巡检。",
    emp:"2024届落实率78%。国家电网是绝对主力雇主（96.8%入职电网系统）。另有少数进入电厂、电力设备制造企业。受经济周期影响极小，行业稳定性全校第一。但进入市局（郑州等城市）竞争激烈，多数去县局。",
@@ -798,7 +423,7 @@ const MAJORS = [
    transfer:"电网就业稳定，是追求'铁饭碗'的好选择。若想更高薪资可考虑计算机（但稳定性不如电网）。女生进入电网后在调度/营销岗很受欢迎。若对强电不感兴趣可转电子信息工程。注意：大一需在江淮校区就读，大二回花园校区。",
    courses:["电路原理","电机学","电力系统分析","电力系统继电保护","高电压技术","发电厂电气","电力电子技术","自动控制原理"]
   },
-  {id:"zdh",n:"自动化",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:76,sa:6200,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏭 工厂+实验室",icon:"🎛️",
+  {id:"zdh",n:"自动化",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:76,sa:6200,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏭 工厂+实验室",icon:"🎛️",rk:null,fp:false,rkNote:null,
    career:"毕业生进入制造业（汽车、电子、化工）、电力系统、智能装备企业等。从事工业自动化系统设计、PLC编程、过程控制、机器人控制等工作。是工业4.0和智能制造的核心专业。",
    suit:"适合对控制系统、机器人、智能化产线感兴趣的同学。需要数学基础好（控制理论涉及大量数学）。喜欢动手实践和调试。",
    emp:"2024届落实率76%。就业面广：制造业自动化部门、电力系统、智能装备企业。智能制造趋势下需求稳步增长。",
@@ -808,7 +433,7 @@ const MAJORS = [
    transfer:"可转电气工程（电网）、计算机（IT方向）、电子信息。",
    courses:["自动控制原理","过程控制","PLC技术","传感器技术","电机与拖动","微机原理","机器人技术"]
   },
-  {id:"gdxx",n:"光电信息科学与工程",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:72,sa:5800,gr:"32%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室为主",icon:"💡",
+  {id:"gdxx",n:"光电信息科学与工程",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:72,sa:5800,gr:"32%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室为主",icon:"💡",rk:null,fp:false,rkNote:null,
    career:"毕业生进入光电企业（激光、光纤、LED、光伏）、通信设备商、科研院所等。从事光电子器件设计、光纤通信、光电检测、光伏技术等工作。",
    suit:"对光学、电子技术、光通信感兴趣。需要物理学基础好（光学、电磁学）。喜欢精密实验和研发工作。",
    emp:"就业面相对较窄。主要去向：光电企业（华工激光、大族激光等）、光伏企业、通信公司。研发岗通常要求硕士学历。",
@@ -820,7 +445,7 @@ const MAJORS = [
   },
 
   // ========== 能源与动力工程学院 (花园校区) ==========
-  {id:"nydl",n:"能源与动力工程",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:6300,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏭 电厂+实验室",icon:"🔥",
+  {id:"nydl",n:"能源与动力工程",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:6300,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏭 电厂+实验室",icon:"🔥",rk:null,fp:false,rkNote:"抽水蓄能方向华水特色",
    career:"分水动和热动两个方向。水动方向进入水电站、抽水蓄能电站；热动方向进入火电厂、核电站、新能源公司。从事动力设备运行、维护、设计和管理。国家能源集团、华能集团、中核集团等央企是主要雇主。",
    suit:"对能源转换、动力机械、发电技术感兴趣。物理和数学基础扎实。能接受电厂运行倒班（四班三运转）。水动方向与水利专业关联紧密。",
    emp:"2024届落实率80%。电力系统央企为主（约50%）。火电方向受'双碳'政策影响收缩，但水电和新能源（风能、太阳能、储能）方向在扩张。华水在抽水蓄能方向有独特优势。",
@@ -830,7 +455,7 @@ const MAJORS = [
    transfer:"若不想去电厂或偏远水电站，可转电气工程（电网）或储能科学与工程（新能源方向）。",
    courses:["工程热力学","流体力学","锅炉原理","汽轮机原理","水轮机","热工控制","新能源技术"]
   },
-  {id:"cnkx",n:"储能科学与工程",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:7000,gr:"30%",pr:"3.56%",grd:"新兴方向，强烈建议考研",ge:"💻 室内+实验室",icon:"🔋",
+  {id:"cnkx",n:"储能科学与工程",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:7000,gr:"30%",pr:"3.56%",grd:"新兴方向，强烈建议考研",ge:"💻 室内+实验室",icon:"🔋",rk:null,fp:false,rkNote:"国家战略性新兴产业",
    career:"新兴热门专业（抽水蓄能方向为华水特色）。毕业生进入抽水蓄能电站、储能电池企业（宁德时代、比亚迪等）、新能源公司、电力设计院。从事储能系统设计、运行管理、技术研发。'双碳'战略下储能行业爆发式增长，人才缺口巨大。",
    suit:"对新能源和储能技术有强烈兴趣。物理化学基础好。关注能源转型和碳中和话题。喜欢前瞻性技术。",
    emp:"储能是国家战略性新兴产业，就业前景极为乐观。华水在抽水蓄能方向有独特优势（依托水利学科）。",
@@ -840,7 +465,7 @@ const MAJORS = [
    transfer:"新兴热门专业前景极好，建议坚持。若不喜欢能源方向可转电气工程或材料。",
    courses:["储能原理","抽水蓄能技术","电池技术","新能源发电","电力系统","热工基础","材料科学基础"]
   },
-  {id:"hgc",n:"核工程与核技术",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:7500,gr:"30%",pr:"3.56%",grd:"强烈建议考研",ge:"🏭 核电站",icon:"☢️",
+  {id:"hgc",n:"核工程与核技术",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:7500,gr:"30%",pr:"3.56%",grd:"强烈建议考研",ge:"🏭 核电站",icon:"☢️",rk:null,fp:false,rkNote:"央企垄断就业 | 薪资高",
    career:"毕业生进入中核集团、中广核集团、国家核电等央企。从事核电站运行、维护、核安全监管、核技术应用等工作。核能是清洁能源的重要组成部分，行业高度垄断、极为稳定。",
    suit:"适合物理（原子物理）基础扎实、对核能技术感兴趣的同学。性格稳重、细致、有强烈的安全意识。能接受核电站（通常在海边偏远地区）的工作地点。",
    emp:"行业高度垄断，就业单位几乎全部为央企（中核/中广核）。招聘人数有限但极为稳定。核电站多在沿海（深圳大亚湾、浙江秦山等）。",
@@ -850,7 +475,7 @@ const MAJORS = [
    transfer:"行业垄断、薪资高，但就业地点局限。若不愿去沿海偏远核电站可考虑转电气工程（电网覆盖城市多）。",
    courses:["原子核物理","核反应堆物理","核电站系统与设备","辐射防护","核安全","热工水力学","核电子学"]
   },
-  {id:"zhny",n:"智慧能源工程",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:7000,gr:"30%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内为主",icon:"⚡🤖",
+  {id:"zhny",n:"智慧能源工程",c:"能源与动力工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:7000,gr:"30%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内为主",icon:"⚡🤖",rk:null,fp:false,rkNote:"2024年新增专业",
    career:"2024年新增专业。融合能源工程与大数据、人工智能、物联网技术。毕业生可在能源互联网企业、综合能源服务公司、电力调度中心等工作。能源行业数字化转型大趋势下就业前景好。",
    suit:"对能源系统和信息技术都有兴趣。有编程和数据分析基础更好。关注智慧能源、虚拟电厂等新概念。",
    emp:"新专业，但可参考能源与动力工程+IT交叉领域的旺盛需求。智慧能源是国家战略方向。",
@@ -862,7 +487,7 @@ const MAJORS = [
   },
 
   // ========== 机械学院 (花园校区) ==========
-  {id:"jxsj",n:"机械设计制造及其自动化",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:82,sa:6000,gr:"25%",pr:"3.56%",grd:"本科就业率高，考研可选",ge:"🏭 工厂",icon:"⚙️",
+  {id:"jxsj",n:"机械设计制造及其自动化",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:82,sa:6000,gr:"25%",pr:"3.56%",grd:"本科就业率高，考研可选",ge:"🏭 工厂",icon:"⚙️",rk:null,fp:false,rkNote:"万金油专业 | 水利机械特色",
    career:"毕业生进入制造业企业（汽车、工程机械、装备制造）、设计院、科研院所等。从事机械产品设计、工艺规划、设备管理、制造系统自动化等工作。就业面极广，几乎所有制造业都需要机械工程师。华水机械在水利机械方向有特色。",
    suit:"适合对机械结构、制造工艺、产品设计感兴趣的同学。需要空间想象能力和动手实践能力。物理（力学）基础好。做事务实、喜欢解决实际工程问题。",
    emp:"2024届落实率82%（华水就业较好的工科之一）。就业面广：汽车行业、工程机械（三一重工、徐工等）、家电制造（格力、美的）、水利机械企业等。万金油专业，不愁找不到工作。",
@@ -872,7 +497,7 @@ const MAJORS = [
    transfer:"万金油专业就业面广。若想更高薪资可转计算机或电气工程。若想改善工作环境可转工业设计。若对水利机械感兴趣在华水很有优势。",
    courses:["机械制图","机械原理","机械设计","机械制造技术","数控技术","液压与气动","材料力学","电工学"]
   },
-  {id:"clcx",n:"材料成型及控制工程",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:74,sa:5600,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏭 工厂",icon:"🔩",
+  {id:"clcx",n:"材料成型及控制工程",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:74,sa:5600,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏭 工厂",icon:"🔩",rk:null,fp:false,rkNote:null,
    career:"毕业生进入制造业企业从事铸造、锻压、焊接、模具设计等工艺技术工作。涉及汽车零部件、航空航天结构件、电子封装等。偏向制造工艺，是制造业不可或缺的技术岗位。",
    suit:"对金属材料加工、制造工艺、模具设计感兴趣。动手能力强。能接受工厂环境。",
    emp:"传统制造工艺专业，就业面中等。汽车零部件和模具行业是主要去向。",
@@ -882,7 +507,7 @@ const MAJORS = [
    transfer:"可转机械设计（设计岗更多）、材料科学与工程。",
    courses:["材料成型原理","冲压工艺","塑料成型","焊接技术","模具设计","材料科学基础"]
   },
-  {id:"clgc",n:"车辆工程",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:76,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研进入车企研发",ge:"🏭 工厂+研发中心",icon:"🚗",
+  {id:"clgc",n:"车辆工程",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:76,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研进入车企研发",ge:"🏭 工厂+研发中心",icon:"🚗",rk:null,fp:false,rkNote:null,
    career:"毕业生进入汽车制造企业（比亚迪、吉利、长城、宇通客车等）、汽车零部件企业、新能源汽车公司。从事整车设计、零部件开发、生产工艺、质量检测等工作。新能源汽车带动行业快速发展，但竞争也加剧。",
    suit:"对汽车设计制造有热情。机械和电子基础都要好（新能源车涉及电池电机电控）。关注新能源汽车和智能网联汽车趋势。",
    emp:"汽车行业受新能源转型影响大。传统燃油车方向需求下降，新能源车方向需求上升。郑州宇通客车是本地重要雇主。",
@@ -892,7 +517,7 @@ const MAJORS = [
    transfer:"可转机械设计（面更广）、电气工程（新能源三电方向）。",
    courses:["汽车构造","汽车理论","汽车设计","汽车制造工艺","新能源汽车技术","汽车电子","发动机原理"]
   },
-  {id:"znzz",n:"智能制造工程",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:80,sa:6800,gr:"25%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"🏭 现代化工厂",icon:"🤖⚙️",
+  {id:"znzz",n:"智能制造工程",c:"机械学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:80,sa:6800,gr:"25%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"🏭 现代化工厂",icon:"🤖⚙️",rk:null,fp:false,rkNote:null,
    career:"新兴热门专业。融合机械制造与人工智能、工业机器人、数字孪生技术。毕业生进入智能工厂、工业互联网平台企业、机器人集成商等。制造业智能化升级是国策，人才需求旺盛。",
    suit:"对机器人、自动化产线、工业4.0感兴趣。数学和编程基础好。喜欢用技术提升生产效率。",
    emp:"智能制造是国家战略方向。就业面覆盖汽车、电子、家电等智能工厂。",
@@ -904,7 +529,7 @@ const MAJORS = [
   },
 
   // ========== 电子工程学院/信息工程学院 ==========
-  {id:"dzxx",n:"电子信息工程",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:79,sa:6200,gr:"30%",pr:"3.56%",grd:"建议考研提升竞争力",ge:"💻 室内为主",icon:"📡",
+  {id:"dzxx",n:"电子信息工程",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:79,sa:6200,gr:"30%",pr:"3.56%",grd:"建议考研提升竞争力",ge:"💻 室内为主",icon:"📡",rk:null,fp:false,rkNote:null,
    career:"毕业生进入通信设备商（华为、中兴）、运营商（移动/联通/电信）、电子制造企业、科研院所。从事通信系统设计、信号处理、嵌入式开发、网络优化等工作。",
    suit:"对电子电路、通信系统、信号处理感兴趣。数学（信号与系统）和物理（电磁场）基础好。喜欢编程和硬件调试。",
    emp:"2024届落实率79%。就业面宽：通信行业、消费电子、汽车电子、物联网等领域都有需求。但本科就业以测试和技术支持为主，研发岗通常要求硕士。",
@@ -914,7 +539,7 @@ const MAJORS = [
    transfer:"可转计算机（薪资更高）、电气工程（电网更稳定）。电子信息的软硬件基础对转CS较容易。",
    courses:["信号与系统","数字信号处理","通信原理","嵌入式系统","高频电子线路","电磁场与电磁波","C语言"]
   },
-  {id:"dzkx",n:"电子科学与技术",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:73,sa:6000,gr:"33%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室+超净间",icon:"🔬",
+  {id:"dzkx",n:"电子科学与技术",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:73,sa:6000,gr:"33%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室+超净间",icon:"🔬",rk:null,fp:false,rkNote:"芯片/半导体方向",
    career:"偏硬件和器件方向。毕业生进入半导体企业（芯片设计/制造）、光电子企业、电子元器件公司。从事集成电路设计、半导体工艺、电子材料研究等工作。国家芯片战略下半导体行业发展迅猛。",
    suit:"对物理（固体物理、量子力学）有浓厚兴趣。数学基础扎实。适合喜欢深入原理和微观世界的同学。需要耐心细致（实验和仿真是主要工作方式）。",
    emp:"芯片/半导体行业是国内重点扶持产业，人才需求大。但研发岗基本要求硕士及以上。本科就业以工艺工程师、测试工程师为主。",
@@ -924,7 +549,7 @@ const MAJORS = [
    transfer:"若不想到硕士才能有好出路，可转电子信息工程或计算机。对芯片有热情的留下。",
    courses:["半导体物理","集成电路设计","半导体器件","微电子工艺","数字电路","模拟电路","量子力学","固体物理"]
   },
-  {id:"txgc",n:"通信工程",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:76,sa:6300,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 室内为主",icon:"📶",
+  {id:"txgc",n:"通信工程",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:76,sa:6300,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 室内为主",icon:"📶",rk:null,fp:false,rkNote:null,
    career:"毕业生进入通信设备商（华为、中兴、爱立信）、电信运营商、互联网公司、通信设计院。从事通信网络规划优化、通信软件开发、5G技术应用等工作。5G/6G建设和应用带来持续需求。",
    suit:"对无线通信、网络技术、5G应用感兴趣。数学基础好（通信理论数学量大）。喜欢编程（Python/MATLAB）。",
    emp:"通信行业成熟但稳定。设备商华为/中兴是主要高薪去向。运营商（移动/电信/联通）稳定但薪资一般。",
@@ -934,7 +559,7 @@ const MAJORS = [
    transfer:"可转计算机（很多课程重叠）、电子信息工程。",
    courses:["通信原理","移动通信","光纤通信","信号与系统","数字信号处理","微波技术","计算机网络"]
   },
-  {id:"rgzn",n:"人工智能",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:7500,gr:"28%",pr:"3.56%",grd:"建议考研进入算法岗",ge:"💻 办公室",icon:"🧠",
+  {id:"rgzn",n:"人工智能",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:7500,gr:"28%",pr:"3.56%",grd:"建议考研进入算法岗",ge:"💻 办公室",icon:"🧠",rk:null,fp:false,rkNote:"前沿热门专业",
    career:"热门前沿专业。毕业生进入互联网公司（算法工程师）、AI企业、智能硬件公司、金融科技公司等。从事机器学习、深度学习、计算机视觉、自然语言处理等工作。AI正在改造各行各业。",
    suit:"对人工智能和深度学习有强烈兴趣。数学基础必须好（线性代数、概率论、优化方法）。编程能力强（Python必备）。喜欢研究论文和复现算法。",
    emp:"AI人才需求旺盛但竞争也激烈。算法岗薪资高但要求也高（通常硕士起步+顶会论文/竞赛获奖）。本科毕业可从事AI应用开发和数据分析。",
@@ -946,7 +571,7 @@ const MAJORS = [
   },
 
   // ========== 信息工程学院（计算机类）==========
-  {id:"jsjkx",n:"计算机科学与技术",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:86,sa:7517,gr:"25%",pr:"3.56%",grd:"本科就业好，考研可进大厂",ge:"💻 办公室",icon:"💻",
+  {id:"jsjkx",n:"计算机科学与技术",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:86,sa:7517,gr:"25%",pr:"3.56%",grd:"本科就业好，考研可进大厂",ge:"💻 办公室",icon:"💻",rk:null,fp:true,rkNote:"全校薪资最高专业之一 | 86%就业率",
    career:"毕业生进入互联网公司（腾讯、阿里、字节、华为等）、软件企业、金融机构IT部门、政府信息化部门。从事软件开发、系统架构、数据分析、技术管理等工作。是全校薪资最高的专业之一，超过80%学生毕业前获得实习机会。",
    suit:"对编程和软件开发有热情。逻辑思维强，善于解决问题。自学能力强（技术更新快）。能接受高强度脑力劳动和持续学习。需要一定的抗压能力（互联网行业节奏快）。",
    emp:"2024届落实率86%（华水就业率前列）。平均薪资7517元/月（全校第二）。华为、腾讯等头部企业是重点雇主。就业面极广，几乎所有行业都需要计算机人才。但行业竞争也激烈，需要持续学习。",
@@ -956,7 +581,7 @@ const MAJORS = [
    transfer:"高薪热门专业，转出率低。若对编程不感兴趣，可转信息管理与信息系统（偏管理）或电气工程（偏硬件）。",
    courses:["数据结构","操作系统","计算机网络","数据库原理","计算机组成原理","算法设计","Java/Python编程","软件工程"]
   },
-  {id:"rjgc",n:"软件工程",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:84,sa:7500,gr:"23%",pr:"3.56%",grd:"本科就业好",ge:"💻 办公室",icon:"🖥️",
+  {id:"rjgc",n:"软件工程",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:84,sa:7500,gr:"23%",pr:"3.56%",grd:"本科就业好",ge:"💻 办公室",icon:"🖥️",rk:null,fp:false,rkNote:null,
    career:"与计算机类似但更偏软件开发实践。毕业生从事软件设计、前后端开发、移动应用开发、软件测试、DevOps等。是互联网和软件行业的主力军。",
    suit:"喜欢动手开发软件产品、写代码。逻辑清晰，注重代码质量。善于团队协作（软件开发是团队运动）。对新技术保持好奇心。",
    emp:"与计算机专业就业方向和薪资水平接近。2024届落实率85%左右。软件外包、互联网公司、企业IT部门、创业公司均有需求。",
@@ -966,7 +591,7 @@ const MAJORS = [
    transfer:"热门专业。注意：特色化示范性软件学院（二批次录取）不能转出到普通专业。",
    courses:["软件工程","面向对象程序设计","软件测试","软件项目管理","Web开发","移动应用开发","数据库","数据结构"]
   },
-  {id:"sjkx",n:"数据科学与大数据技术",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:7300,gr:"26%",pr:"3.56%",grd:"建议考研进入数据科学家岗",ge:"💻 办公室",icon:"📊",
+  {id:"sjkx",n:"数据科学与大数据技术",c:"信息工程学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:80,sa:7300,gr:"26%",pr:"3.56%",grd:"建议考研进入数据科学家岗",ge:"💻 办公室",icon:"📊",rk:null,fp:false,rkNote:null,
    career:"热门方向。毕业生从事大数据开发、数据分析、数据工程师、BI开发等工作。几乎所有行业（金融、电商、医疗、制造）都需要数据人才。",
    suit:"对数据敏感、喜欢从数据中发现规律。统计和编程能力并重。逻辑清晰，善于可视化呈现。",
    emp:"大数据人才需求旺盛。就业面跨越所有行业。",
@@ -978,7 +603,7 @@ const MAJORS = [
   },
 
   // ========== 其他工科专业 ==========
-  {id:"clkxygc",n:"无机非金属材料工程",c:"材料学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:73,sa:5500,gr:"30%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室+工厂",icon:"🧪",
+  {id:"clkxygc",n:"无机非金属材料工程",c:"材料学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:73,sa:5500,gr:"30%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室+工厂",icon:"🧪",rk:null,fp:false,rkNote:"建筑材料特色",
    career:"毕业生进入建材企业（水泥、玻璃、陶瓷）、新能源材料公司、建筑检测机构。从事材料研发、工艺管理、质量检测等。华水材料偏向建筑材料（水泥混凝土方向），与土木水利结合紧密。",
    suit:"对材料（水泥、陶瓷、玻璃等）的组成、性能、工艺感兴趣。化学基础要好。喜欢做实验。",
    emp:"建材行业需求稳定（和基建相关）。也有向新能源材料（锂电池材料）转型的机会。但本科岗位以工艺和质量为主，研发需硕士。",
@@ -988,7 +613,7 @@ const MAJORS = [
    transfer:"若不喜欢工厂实验室可转土木工程（建筑材料方向契合）、应用化学。",
    courses:["材料科学基础","无机材料物理化学","水泥工艺学","混凝土学","材料测试技术","胶凝材料"]
   },
-  {id:"gclx",n:"工程力学",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:74,sa:6000,gr:"35%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 设计院+计算中心",icon:"📐",
+  {id:"gclx",n:"工程力学",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:74,sa:6000,gr:"35%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 设计院+计算中心",icon:"📐",rk:null,fp:false,rkNote:"基础型专业 | 升学率35%",
    career:"基础型专业。毕业生进入设计院、研究院、CAE软件公司、汽车/航空企业仿真部门。从事结构分析、有限元计算、仿真模拟等。是所有工程学科的计算基础。",
    suit:"数学（高等数学、数值分析）必须非常好。物理（力学）深厚。喜欢理论推导和数值计算。适合学术型人才。",
    emp:"就业面不如应用型工科广但更加专业。设计院/研究院是主要去向（通常需要硕士）。CAE仿真工程师需求在增加。",
@@ -998,7 +623,7 @@ const MAJORS = [
    transfer:"基础型专业，若想更工程化可转土木工程、机械设计。",
    courses:["理论力学","材料力学","结构力学","弹性力学","有限元法","振动力学","计算力学","流体力学"]
   },
-  {id:"chgc",n:"测绘工程",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:77,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"🏗️ 野外+室内",icon:"🗺️",
+  {id:"chgc",n:"测绘工程",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:77,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"🏗️ 野外+室内",icon:"🗺️",rk:null,fp:false,rkNote:null,
    career:"毕业生进入测绘院、勘测设计院、地理信息企业、城市规划部门。从事地形测量、工程测量、摄影测量与遥感、GIS数据处理。是各类工程建设不可或缺的前期工作。",
    suit:"喜欢户外工作（虽然辛苦但能跑遍各地）。对地理空间数据、地图有感觉。细心（测量数据精度要求高）。数学基础尚可。",
    emp:"2024届落实率77%。测绘行业受基建投资影响较大。无人机测绘、三维激光扫描等新技术开拓了新领域。",
@@ -1008,7 +633,7 @@ const MAJORS = [
    transfer:"若不喜欢野外可转遥感科学与技术（偏室内数据分析）或计算机。",
    courses:["测量学","GPS原理","摄影测量","遥感","GIS","工程测量","地籍测量","误差理论"]
   },
-  {id:"ygkx",n:"遥感科学与技术",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6500,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 室内为主",icon:"🛰️",
+  {id:"ygkx",n:"遥感科学与技术",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6500,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 室内为主",icon:"🛰️",rk:null,fp:false,rkNote:null,
    career:"卫星遥感、无人机遥感的民用化带来大量岗位。毕业生进入遥感企业、测绘局、环保部门、农业部门、自然资源部门。从事遥感影像处理、解译分析、GIS开发。比测绘工程偏室内和计算机。",
    suit:"对卫星遥感、无人机航拍、图像处理有兴趣。编程能力好（Python遥感数据处理）。喜欢从'上帝视角'看地球。",
    emp:"商业遥感（卫星遥感数据分析）发展迅速。智慧城市、精准农业、环境监测等领域应用广泛。",
@@ -1018,7 +643,7 @@ const MAJORS = [
    transfer:"可转计算机（GIS开发方向）、数据科学。与测绘工程的区别是更多室内工作。",
    courses:["遥感原理","遥感图像处理","摄影测量","GIS","Python","微波遥感","高光谱遥感"]
   },
-  {id:"dzgc",n:"地质工程",c:"水利学院(地质)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:75,sa:6200,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏗️ 野外+室内",icon:"⛏️",
+  {id:"dzgc",n:"地质工程",c:"水利学院(地质)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:75,sa:6200,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🏗️ 野外+室内",icon:"⛏️",rk:null,fp:true,rkNote:"国家级一流本科专业建设点",
    career:"国家级一流本科专业建设点。毕业生进入地勘院、水利水电设计院（地质勘测部）、交通设计院（岩土勘察）、地质灾害防治单位。从事工程地质勘察、地质灾害评估、地基处理等。是水利水电工程的'先头部队'。",
    suit:"地质爱好者！喜欢野外考察和勘探。体能好（爬山是日常）。对岩石矿物有天然的好奇心。能接受经常出差。",
    emp:"地质勘察是水利水电工程建设的第一关。水利基建投资稳定，勘察需求有保障。地质灾害防治是增长点。",
@@ -1028,7 +653,7 @@ const MAJORS = [
    transfer:"若不喜欢野外可转土木工程或计算机。喜欢地质的留下（华水地质在水利领域有特色）。",
    courses:["工程地质","水文地质","岩石力学","土力学","地质灾害","地质勘察","矿物学","构造地质"]
   },
-  {id:"tmgc_jn",n:"给排水科学与工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:5900,gr:"27%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院+现场",icon:"🚰",
+  {id:"tmgc_jn",n:"给排水科学与工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:5900,gr:"27%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院+现场",icon:"🚰",rk:null,fp:false,rkNote:null,
    career:"毕业生进入市政设计院、建筑设计院、水务集团、环保公司。从事建筑给排水设计、市政管网规划、水处理工艺设计、消防系统设计。给排水是建筑的'血管系统'，需求刚性。",
    suit:"对水处理（净水和污水处理）、建筑水系统感兴趣。做事细致（管网设计不容出错）。适合喜欢稳定市政行业的人。",
    emp:"2024届落实率78%。是建筑/市政行业刚需。水环境治理（海绵城市、黑臭水体治理）带来增量需求。",
@@ -1038,7 +663,7 @@ const MAJORS = [
    transfer:"可转环境工程、土木工程。给排水的市政设计院方向工作环境不错。",
    courses:["给排水管道系统","水质工程学","建筑给排水","水处理技术","水力学","水泵与泵站","水微生物学"]
   },
-  {id:"jzhjy",n:"建筑环境与能源应用工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:76,sa:5800,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院+现场",icon:"❄️",
+  {id:"jzhjy",n:"建筑环境与能源应用工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:76,sa:5800,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院+现场",icon:"❄️",rk:null,fp:false,rkNote:null,
    career:"毕业生进入建筑设计院、暖通设备企业（格力/美的/大金）、节能公司、物业管理公司。从事建筑暖通空调设计、建筑节能、洁净室设计、制冷系统设计。",
    suit:"对建筑环境（温度/湿度/洁净度）控制感兴趣。物理（热力学）基础好。喜欢系统设计。",
    emp:"暖通是建筑必需系统。建筑节能和绿色建筑趋势利好。",
@@ -1048,7 +673,7 @@ const MAJORS = [
    transfer:"可转土木工程、能源与动力工程。",
    courses:["工程热力学","传热学","流体力学","暖通空调","建筑环境学","制冷技术","建筑节能"]
   },
-  {id:"zyxh",n:"资源循环科学与工程",c:"材料学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:71,sa:5300,gr:"30%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室+工厂",icon:"♻️",
+  {id:"zyxh",n:"资源循环科学与工程",c:"材料学院",ca:"花园校区",y:"四年",d:"工学学士",cat:"工学",er:71,sa:5300,gr:"30%",pr:"3.56%",grd:"强烈建议考研",ge:"🔬 实验室+工厂",icon:"♻️",rk:null,fp:false,rkNote:null,
    career:"环保类专业。毕业生进入固废处理企业、环保公司、资源回收企业、环境监测机构。从事固体废物资源化、废水处理、再生材料研究。循环经济是国家战略方向。",
    suit:"对环保和资源循环利用有使命感。化学基础好（处理工艺涉及化学）。喜欢动手实验。",
    emp:"循环经济和'无废城市'建设带来政策利好。但行业发展阶段尚早，优质岗位增速有限。",
@@ -1058,7 +683,7 @@ const MAJORS = [
    transfer:"可转环境工程、给排水、材料。",
    courses:["固废处理","资源循环利用","环境工程","材料科学","化工原理","环境监测"]
   },
-  {id:"hjgc",n:"环境工程",c:"水利学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:74,sa:5500,gr:"32%",pr:"3.56%",grd:"建议考研",ge:"🔬 实验室+现场",icon:"🌿",
+  {id:"hjgc",n:"环境工程",c:"水利学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:74,sa:5500,gr:"32%",pr:"3.56%",grd:"建议考研",ge:"🔬 实验室+现场",icon:"🌿",rk:null,fp:false,rkNote:null,
    career:"毕业生进入环保局（考公）、环境监测站、设计院（环评/水处理设计）、环保企业（污水处理厂/垃圾处理场/环境咨询公司）。从事水污染控制、大气污染治理、环境影响评价、环境监测。环保执法力度加大提升了行业需求。",
    suit:"对环境保护有热情和使命感。化学和生物学基础要好。能接受跑现场（污水厂、监测点）采集样品。",
    emp:"环保执法趋严和'双碳'战略利好。但体制外环保企业薪资偏低。考公务员/事业编是很好的出路（环保局、水务局）。",
@@ -1068,7 +693,7 @@ const MAJORS = [
    transfer:"可转给排水（更偏设计院方向）、水文与水资源（更偏数据方向）。",
    courses:["水污染控制","大气污染控制","固废处理","环境监测","环境影响评价","环境微生物","环境化学"]
   },
-  {id:"jz",n:"建筑学",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"五年",d:"建筑学学士",cat:"工学",er:77,sa:6200,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院办公室",icon:"🏛️",
+  {id:"jz",n:"建筑学",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"五年",d:"建筑学学士",cat:"工学",er:77,sa:6200,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院办公室",icon:"🏛️",rk:null,fp:false,rkNote:"五年制 | 注册建筑师",
    career:"五年制。毕业生进入建筑设计院、规划设计院、房地产企业（设计部）、室内设计公司。从事建筑设计、方案创作、施工图绘制。注册建筑师含金量极高。房地产下行对行业有冲击，但城市更新、乡村振兴等领域有增量。",
    suit:"有美术基础和空间审美能力。喜欢创意设计但也能接受规范约束。能熬夜（交图周是常态）。对建筑文化和城市空间有热情。",
    emp:"2024届落实率77%。建筑设计院为主。受房地产下行影响，岗位增速放缓。但五年制建筑学专业学位认可度高，考注册建筑师有优势。",
@@ -1078,7 +703,7 @@ const MAJORS = [
    transfer:"五年制，沉没成本高，慎重转出。若不喜欢设计可转城乡规划（偏宏观）或工程管理。",
    courses:["建筑设计","建筑构造","建筑物理","建筑历史","建筑力学","城市规划原理","建筑表现"]
   },
-  {id:"cxgh",n:"城乡规划",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"五年",d:"工学学士",cat:"工学",er:76,sa:6000,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 规划院办公室",icon:"🏙️",
+  {id:"cxgh",n:"城乡规划",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"五年",d:"工学学士",cat:"工学",er:76,sa:6000,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 规划院办公室",icon:"🏙️",rk:null,fp:false,rkNote:"五年制",
    career:"五年制。毕业生进入规划设计院、城市规划管理部门（考公务员）、房地产公司、咨询公司。从事城乡规划设计、国土空间规划、城市设计等工作。国土空间规划体系改革带来新机遇。",
    suit:"对城市发展和空间规划感兴趣。宏观思维+微观设计并重。善用GIS/数据分析。关注社会公平和可持续发展。",
    emp:"规划设计院和公务员是两大出路。国土空间规划改革拓展了就业面。",
@@ -1088,7 +713,7 @@ const MAJORS = [
    transfer:"可转建筑学（五年制的可互转）、风景园林、人文地理。",
    courses:["城市规划原理","城市设计","国土空间规划","道路交通规划","城市地理学","GIS","城市经济学"]
   },
-  {id:"fjyl",n:"风景园林",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"五年",d:"工学学士",cat:"工学",er:73,sa:5600,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院+户外",icon:"🌳",
+  {id:"fjyl",n:"风景园林",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"五年",d:"工学学士",cat:"工学",er:73,sa:5600,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"💻 设计院+户外",icon:"🌳",rk:null,fp:false,rkNote:"五年制",
    career:"五年制。毕业生进入园林设计院、景观设计公司、市政园林部门、地产公司（景观部）。从事公园、广场、居住区、滨水空间的景观设计。美丽中国建设和城市双修带来需求。",
    suit:"喜欢植物和户外空间设计。有美术基础和审美能力。关注生态和可持续发展。能接受户外考察（爬山逛公园测量）。",
    emp:"市政园林和地产景观是两大市场。城市更新和公园城市建设利好。",
@@ -1098,7 +723,7 @@ const MAJORS = [
    transfer:"可转建筑学（五年互通）、城乡规划。",
    courses:["风景园林设计","园林植物","园林工程","景观生态学","园林建筑","中国园林史","城市绿地规划"]
   },
-  {id:"xf",n:"消防工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6000,gr:"25%",pr:"3.56%",grd:"本科就业好",ge:"💻 办公室+巡检",icon:"🔥",
+  {id:"xf",n:"消防工程",c:"土木与交通学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6000,gr:"25%",pr:"3.56%",grd:"本科就业好",ge:"💻 办公室+巡检",icon:"🔥",rk:null,fp:false,rkNote:null,
    career:"毕业生进入应急管理部门（消防系统、考公务员）、消防工程企业、建筑设计院（消防设计）、大型企业安全管理部门、保险公司（火灾风险评估）。从事消防系统设计、消防安全评估、消防检测维保。",
    suit:"对消防安全有职业使命感。做事规范、注重细节。能接受消防检查和评估的现场工作。",
    emp:"消防安全是法定要求，需求刚性。注册消防工程师证书含金量高。公务员（消防系统）也是稳定出路。",
@@ -1108,7 +733,7 @@ const MAJORS = [
    transfer:"可转土木工程（建筑方向）、安全工程。",
    courses:["消防工程","火灾学","消防给水","建筑防火","自动灭火系统","火灾探测","安全系统工程"]
   },
-  {id:"znkq",n:"智能地球探测",c:"水利学院(地质)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6800,gr:"28%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内+野外",icon:"🌍🤖",
+  {id:"znkq",n:"智能地球探测",c:"水利学院(地质)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:78,sa:6800,gr:"28%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 室内+野外",icon:"🌍🤖",rk:null,fp:false,rkNote:"新兴交叉专业",
    career:"新兴交叉专业。融合地质勘察与人工智能、大数据、地球物理探测技术。毕业生可在地质调查院、矿产资源企业、地质灾害预警中心、遥感企业等就业。",
    suit:"对地球科学和AI技术都有兴趣。适合喜欢探索未知的技术型人才。",
    emp:"新专业，结合了地质+AI两个方向，就业前景看好。智慧地质是趋势。",
@@ -1118,7 +743,7 @@ const MAJORS = [
    transfer:"新兴交叉专业，建议坚持。",
    courses:["地球物理","遥感","GIS","机器学习","地质学","Python","传感器"]
   },
-  {id:"yyhx",n:"应用化学",c:"材料学院",ca:"花园校区",y:"四年",d:"理学学士",cat:"理学",er:70,sa:5200,gr:"35%",pr:"3.56%",grd:"强烈建议考研或考教师编",ge:"🔬 实验室",icon:"⚗️",
+  {id:"yyhx",n:"应用化学",c:"材料学院",ca:"花园校区",y:"四年",d:"理学学士",cat:"理学",er:70,sa:5200,gr:"35%",pr:"3.56%",grd:"强烈建议考研或考教师编",ge:"🔬 实验室",icon:"⚗️",rk:null,fp:false,rkNote:null,
    career:"基础理学专业。毕业生方向：①考研深造→科研/高校；②化工/制药/日化企业（质检/研发助理）；③中小学化学教师（需考教资/考编）；④环保/检测机构（化验分析）。本科直接就业面窄，薪资一般。",
    suit:"喜欢化学、实验操作。做事细致有条理。适合立志从事科研或教育行业的同学。",
    emp:"本科就业以化学检验、质量检测为主，薪资在全校偏低。考研后进研究所或高校是最佳路径。教师编也是不错选择。",
@@ -1128,7 +753,7 @@ const MAJORS = [
    transfer:"若不想考研或当老师可考虑转材料、给排水（化学相关）。若想直接就业建议转工科。",
    courses:["无机化学","有机化学","分析化学","物理化学","化工原理","仪器分析","高分子化学"]
   },
-  {id:"clkz",n:"测控技术与仪器",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:74,sa:6000,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🔬 实验室+工厂",icon:"📏",
+  {id:"clkz",n:"测控技术与仪器",c:"电气工程学院",ca:"花园校区(大一江淮)",y:"四年",d:"工学学士",cat:"工学",er:74,sa:6000,gr:"28%",pr:"3.56%",grd:"建议考研",ge:"🔬 实验室+工厂",icon:"📏",rk:null,fp:false,rkNote:null,
    career:"毕业生进入制造业（自动化检测）、仪器仪表企业、科研院所、计量检测机构。从事精密测量、自动检测系统设计、仪器开发、质量控制。",
    suit:"对精密仪器和测量技术感兴趣。物理和电子基础好。做事追求精度和细致。",
    emp:"精密制造和计量检测是制造业基石。专业面窄但专业性强。",
@@ -1140,7 +765,7 @@ const MAJORS = [
   },
 
   // ========== 数学与统计学院 (龙子湖校区) ==========
-  {id:"sxyy",n:"数学与应用数学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:72,sa:5600,gr:"38%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室/教室",icon:"📐",
+  {id:"sxyy",n:"数学与应用数学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:72,sa:5600,gr:"38%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室/教室",icon:"📐",rk:null,fp:false,rkNote:"升学率38% | 考研跳板专业",
    career:"基础理学专业。毕业生主要路径：①考研→金融数学/计算机/统计方向；②中小学数学教师（需考教资/考编）；③数据分析岗位；④考公务员。本科直接对口就业岗位有限，但数学基础在转行时优势明显。",
    suit:"数学好是硬门槛（高考数学建议120+）。喜欢抽象思维和理论推导。能静下心学习。适合对学术或教育行业有兴趣的同学。",
    emp:"本科就业面窄（以教师和数据助理为主）。但数学专业在考研转行时极受欢迎（金融、CS、统计等方向都喜欢数学背景的学生）。",
@@ -1150,7 +775,7 @@ const MAJORS = [
    transfer:"若不想考研，建议大一考虑转到有直接就业出路的专业（计算机、电气等）。数学适合作为跳板专业。",
    courses:["数学分析","高等代数","概率论与数理统计","常微分方程","复变函数","实变函数","数学建模","数值分析"]
   },
-  {id:"xxjs",n:"信息与计算科学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:74,sa:6200,gr:"32%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室",icon:"🔢",
+  {id:"xxjs",n:"信息与计算科学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:74,sa:6200,gr:"32%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室",icon:"🔢",rk:null,fp:false,rkNote:"数学+计算机交叉",
    career:"数学+计算机交叉专业。毕业生进入IT企业、金融科技公司、数据分析公司。从事算法设计、数据分析、科学计算、软件测试。比纯数学就业面宽很多，但不如纯计算机深入。",
    suit:"数学和编程都有兴趣。逻辑思维强。适合做算法开发和计算类工作。",
    emp:"就业比纯数学好（有编程技能）。IT和金融科技是主要去向。但需自学补充更多CS课程来竞争纯CS岗位。",
@@ -1160,7 +785,7 @@ const MAJORS = [
    transfer:"可转计算机或数据科学。数学基础好是优势。",
    courses:["数学分析","数值分析","数据结构","算法设计","Python","信息论","运筹学","微分方程数值解"]
   },
-  {id:"tjx",n:"统计学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:70,sa:5800,gr:"35%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室",icon:"📈",
+  {id:"tjx",n:"统计学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:70,sa:5800,gr:"35%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室",icon:"📈",rk:null,fp:false,rkNote:null,
    career:"毕业生进入统计局（考公务员）、金融机构（银行/保险风控/精算）、市场调研公司、互联网企业（数据分析）。统计学是AI和大数据的底层学科，近两年热度回升。",
    suit:"对数据和概率感兴趣。细心且有逻辑。会用统计软件（R/Python/SPSS）。适合做分析型工作。",
    emp:"大数据和AI趋势利好统计学。金融业（银行风控、保险精算）是传统高薪方向。但本科统计学偏理论，应用不足，建议考研。",
@@ -1170,7 +795,7 @@ const MAJORS = [
    transfer:"可转数据科学（更偏工程）、金融数学。统计学是很好的基础，建议坚持读研。",
    courses:["概率论","数理统计","回归分析","多元统计","时间序列","抽样调查","R/Python","统计软件"]
   },
-  {id:"ytj",n:"应用统计学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:67,sa:5500,gr:"33%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室",icon:"📉",
+  {id:"ytj",n:"应用统计学",c:"数学与统计学院",ca:"龙子湖校区",y:"四年",d:"理学学士",cat:"理学",er:67,sa:5500,gr:"33%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室",icon:"📉",rk:null,fp:false,rkNote:null,
    career:"与统计学类似但更偏经济/金融/生物统计应用。2024届落实率67%偏低，需要主动拓展技能。",
    suit:"同统计学。需更主动学习编程和应用工具。",
    emp:"2024届落实率67%偏低（学校平均以下）。考研或考公/考编是提升出路的重要路径。",
@@ -1182,7 +807,7 @@ const MAJORS = [
   },
 
   // ========== 管理与经济学院 (龙子湖校区/大一江淮) ==========
-  {id:"jjx",n:"经济学",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:83,sa:6000,gr:"30%",pr:"3.56%",grd:"建议考研进入金融机构",ge:"💻 办公室",icon:"📊",
+  {id:"jjx",n:"经济学",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:83,sa:6000,gr:"30%",pr:"3.56%",grd:"建议考研进入金融机构",ge:"💻 办公室",icon:"📊",rk:null,fp:false,rkNote:"83%落实率",
    career:"毕业生进入银行、证券公司、保险公司、企业财务/战略部门、政府部门（发改委/统计局等，需考公）。从事经济分析、投资研究、风险管理等。华水经济学在水资源经济和工程经济方向有特色。",
    suit:"对宏观经济和金融市场有兴趣。数学基础尚可（经济学涉及很多数学）。善于逻辑分析。关注政策新闻和经济趋势。",
    emp:"2024届落实率83%。银行是最大雇主（约30%考银行/进入银行）。考研/考公/考银行是三条主要路径。经济学属于万金油专业，什么都能做但什么都不精。",
@@ -1192,7 +817,7 @@ const MAJORS = [
    transfer:"可转会计学（更务实）、金融数学（更量化）。经济学偏理论，若喜欢实操建议转会计或财务管理。",
    courses:["微观经济学","宏观经济学","计量经济学","产业经济学","金融学","财政学","国际经济学","统计学"]
   },
-  {id:"gjmy",n:"国际经济与贸易",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:74,sa:5600,gr:"26%",pr:"3.56%",grd:"建议考研或学好英语",ge:"💻 办公室",icon:"🌐",
+  {id:"gjmy",n:"国际经济与贸易",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:74,sa:5600,gr:"26%",pr:"3.56%",grd:"建议考研或学好英语",ge:"💻 办公室",icon:"🌐",rk:null,fp:false,rkNote:null,
    career:"毕业生进入外贸企业、跨境电商公司、货运代理公司、银行国际业务部。从事外贸业务、报关报检、跨境电商运营。近年受国际贸易摩擦影响，但跨境电商（速卖通/TikTok Shop）开辟了新方向。",
    suit:"英语必须好（CET-6是基础，最好有商务英语/雅思）。对外贸/跨境电商/全球化商业有兴趣。善于沟通谈判。",
    emp:"传统外贸行业增长乏力，但跨境电商（拼多多Temu/TikTok Shop等）带来大量新岗位。英语好+懂运营的同学就业尚可。",
@@ -1202,7 +827,7 @@ const MAJORS = [
    transfer:"可转经济学、市场营销、会计学。若英语好建议保留。",
    courses:["国际贸易实务","国际结算","外贸函电","国际商法","国际金融","跨境电商","商务英语"]
   },
-  {id:"jrsx",n:"金融数学",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:76,sa:6500,gr:"32%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室",icon:"💰",
+  {id:"jrsx",n:"金融数学",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:76,sa:6500,gr:"32%",pr:"3.56%",grd:"强烈建议考研",ge:"💻 办公室",icon:"💰",rk:null,fp:false,rkNote:null,
    career:"数学+金融交叉专业。毕业生进入银行（风控/量化分析）、证券/基金公司、保险公司（精算）、金融科技企业。金融行业对数学好的毕业生需求大（量化交易、风险管理都需要强数学功底）。",
    suit:"数学基础要好（比纯金融要求高）。对金融市场感兴趣。逻辑分析能力强。",
    emp:"金融行业的量化风控方向对数学人才需求大。华水非财经强校，进顶级金融机构需考研到财经名校。",
@@ -1212,7 +837,7 @@ const MAJORS = [
    transfer:"可转统计学、经济学。若数学好建议留。",
    courses:["金融数学","随机过程","金融工程","风险管理","计量经济学","精算学","Python","时间序列"]
   },
-  {id:"szjj",n:"数字经济",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:80,sa:7000,gr:"28%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 办公室",icon:"💹",
+  {id:"szjj",n:"数字经济",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"经济学学士",cat:"经济学",er:80,sa:7000,gr:"28%",pr:"3.56%",grd:"新兴专业，建议考研",ge:"💻 办公室",icon:"💹",rk:null,fp:false,rkNote:"2025年新增专业",
    career:"2025年新增专业。融合经济学与大数据、区块链、人工智能。毕业生可进入数字经济平台企业、金融科技公司、政府数据管理部门。数字经济是国家重点发展方向。",
    suit:"对数字技术驱动的经济变革感兴趣。经济+技术双重兴趣。",
    emp:"新专业，可参考经济学+数据科学两个方向的就业。数字经济是国家战略。",
@@ -1222,7 +847,7 @@ const MAJORS = [
    transfer:"新兴专业，建议坚持。",
    courses:["数字经济概论","区块链","大数据分析","平台经济","Python","计量经济学","人工智能"]
   },
-  {id:"kuaiji",n:"会计学",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:78,sa:5800,gr:"24%",pr:"3.56%",grd:"CPA>考研，考证优先",ge:"💻 办公室",icon:"🧾",
+  {id:"kuaiji",n:"会计学",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:78,sa:5800,gr:"24%",pr:"3.56%",grd:"CPA>考研，考证优先",ge:"💻 办公室",icon:"🧾",rk:null,fp:true,rkNote:"国家级一流本科专业 | 文科就业之王",
    career:"国家级一流本科专业。华水文科类就业最好的专业之一。毕业生进入会计师事务所（四大/内资八大）、企业财务部、银行、税务局（考公务员）。从事审计、税务、财务分析、成本管理。81人被银行录用（2025届）。",
    suit:"对数字敏感、做事细致有条理。能接受考证生活（CPA/ACCA/初级会计等证书是职业通行证）。性格稳重、可靠。不怕月底/年底加班（结账、年报期）。",
    emp:"2024届落实率78%。2025届已有81人被银行录用。就业方向：会计师事务所（约30%）、企业财务（约40%）、银行/公务员（约20%）。会计是企业的'刚需'，几乎每个公司都需要。",
@@ -1232,7 +857,7 @@ const MAJORS = [
    transfer:"就业务实稳定。若不喜欢数字和考证可转市场营销或行政管理（不考证）。会计适合追求稳定的同学，但上升速度慢于互联网。",
    courses:["基础会计","中级财务会计","成本会计","管理会计","审计学","财务管理","税法","会计信息系统"]
   },
-  {id:"gcgl",n:"工程管理",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:92,sa:6500,gr:"22%",pr:"3.56%",grd:"考证>考研，一建含金量高",ge:"💻 项目部+办公室",icon:"📋",
+  {id:"gcgl",n:"工程管理",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:92,sa:6500,gr:"22%",pr:"3.56%",grd:"考证>考研，一建含金量高",ge:"💻 项目部+办公室",icon:"📋",rk:null,fp:true,rkNote:"全校就业率第1名 92% 🏆",
    career:"2024届落实率92%！华水就业率最高的专业！毕业生进入建筑/水利/交通企业（中建/中交/中铁等央企项目部）、房地产企业、工程咨询公司。从事工程造价、招投标、施工管理、合同管理。是'懂技术+会管理'的复合型人才。",
    suit:"适合既对工程有一定了解又偏向管理方向的同学。沟通协调能力强（工程管理需要和设计、施工、监理多方打交道）。能接受项目部工作。做事有条理、注重合同和规范。",
    emp:"2024届落实率92%（全校第1）。央企项目部是最大雇主。几乎所有大型基建项目都需要工程管理人员。但如果不想去项目部，就业面就窄了。",
@@ -1242,7 +867,7 @@ const MAJORS = [
    transfer:"就业率高但工作环境一般。若不能接受项目部可转会计学（室内稳定）或计算机。女生建议走工程造价方向（偏室内）。",
    courses:["工程经济学","工程项目管理","工程估价","招投标与合同管理","施工组织","BIM","工程力学概论"]
   },
-  {id:"gczj",n:"工程造价",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:85,sa:6200,gr:"22%",pr:"3.56%",grd:"考证优先",ge:"💻 办公室为主",icon:"💰",
+  {id:"gczj",n:"工程造价",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:85,sa:6200,gr:"22%",pr:"3.56%",grd:"考证优先",ge:"💻 办公室为主",icon:"💰",rk:5,fp:true,rkNote:"全国第5位 A+级 🏆 | 华水王牌管理类专业",
    career:"全国排名第5位的王牌专业（A+级）！毕业生进入工程造价咨询公司、设计院（概预算）、建筑/水利企业（投标报价）、审计公司。从事工程概算、预算、结算、决算。是工程行业的'财务师'，几乎所有工程都需要造价人员。",
    suit:"对数字敏感，做事细致精确（一个小数点算错就是几百万的差距）。喜欢规范的定额计算工作。相比施工现场，造价岗位更偏办公室。",
    emp:"全国排名第5（A+），华水王牌管理类专业。每个工程项目都必须有造价人员。国企/民企/咨询公司都有需求。受单个项目影响小，行业需求稳定。",
@@ -1252,7 +877,7 @@ const MAJORS = [
    transfer:"全国第5的王牌专业，就业好+环境好，慎重转出。若想转可考虑工程管理或会计学。",
    courses:["工程估价","安装工程估价","市政工程估价","工程量清单计价","招投标","BIM造价","工程经济学","识图"]
   },
-  {id:"sc",n:"市场营销",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:72,sa:5600,gr:"22%",pr:"3.56%",grd:"经验>学历，不急需考研",ge:"💻 办公室+跑客户",icon:"📢",
+  {id:"sc",n:"市场营销",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:72,sa:5600,gr:"22%",pr:"3.56%",grd:"经验>学历，不急需考研",ge:"💻 办公室+跑客户",icon:"📢",rk:null,fp:false,rkNote:null,
    career:"毕业生进入各行各业（快消、互联网、制造、金融等）的销售/市场部、广告公司、电商企业。从事品牌营销、市场推广、销售管理、电商运营、新媒体营销。就业面极广，但起薪偏低且业绩压力大。",
    suit:"性格外向、喜欢和人打交道。沟通表达能力强。有一定创意和策划能力。能承受业绩指标压力。愿意从基层销售做起。",
    emp:"万金油专业，什么行业都能进，但入职门槛低（非营销专业的人也可以做营销）。核心岗位（品牌/策划）需要经验积累。销售岗底薪低但提成空间大。",
@@ -1262,7 +887,7 @@ const MAJORS = [
    transfer:"就业面广但起薪低。若想更高起薪可转会计学或计算机。性格内向者慎重。",
    courses:["市场营销","消费者行为","品牌管理","广告学","市场调查","电子商务","新媒体营销","销售管理"]
   },
-  {id:"xxgl",n:"信息管理与信息系统",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:75,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研或考公",ge:"💻 办公室",icon:"💼",
+  {id:"xxgl",n:"信息管理与信息系统",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:75,sa:6200,gr:"26%",pr:"3.56%",grd:"建议考研或考公",ge:"💻 办公室",icon:"💼",rk:null,fp:false,rkNote:null,
    career:"IT+管理交叉专业。毕业生进入企业IT部门、ERP/用友/金蝶等管理软件公司、咨询公司、政府信息化部门。从事IT项目管理、系统分析与设计、ERP实施、数据分析。介于计算机和管理之间。",
    suit:"对信息系统和业务流程有兴趣。有一定编程基础（不如计算机深）。喜欢分析和优化企业运营流程。",
    emp:"就业在IT（技术要求不如CS深）和管理（不如纯管理学精）之间，需要找准定位。ERP咨询和实施是不错的方向。",
@@ -1272,7 +897,7 @@ const MAJORS = [
    transfer:"可转计算机（更偏技术）或工程管理（更偏管理）。",
    courses:["管理信息系统","数据库","系统分析与设计","ERP","信息资源管理","Python","管理学"]
   },
-  {id:"wlgl",n:"物流管理",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:73,sa:5500,gr:"24%",pr:"3.56%",grd:"经验>学历",ge:"💻 办公室+仓库",icon:"📦",
+  {id:"wlgl",n:"物流管理",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:73,sa:5500,gr:"24%",pr:"3.56%",grd:"经验>学历",ge:"💻 办公室+仓库",icon:"📦",rk:null,fp:false,rkNote:null,
    career:"毕业生进入物流企业（顺丰/京东物流/菜鸟等）、电商企业（仓储物流）、制造企业（供应链管理）、港口/货运公司。从事物流规划、仓储管理、供应链优化、货运代理。电商和跨境电商驱动物流行业持续增长。",
    suit:"对供应链和物流运营感兴趣。组织协调能力强。能接受一定程度的体力劳动（仓库管理）。数据分析能力有帮助。",
    emp:"电商物流和跨境物流是增长点。顺丰/京东物流/菜鸟等大平台岗位多。但传统物流岗位存在薪资偏低和工作强度大的问题。",
@@ -1282,7 +907,7 @@ const MAJORS = [
    transfer:"可转信息管理（物流信息化方向）或市场营销。",
    courses:["物流管理","供应链管理","仓储管理","运输管理","物流信息系统","运筹学","国际贸易"]
   },
-  {id:"dsgl",n:"大数据管理与应用",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:80,sa:7000,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室",icon:"📊🤖",
+  {id:"dsgl",n:"大数据管理与应用",c:"管理与经济学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:80,sa:7000,gr:"26%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室",icon:"📊🤖",rk:null,fp:false,rkNote:"2024年新增专业",
    career:"2024年新增专业。商业+大数据交叉。毕业生可从事商业数据分析、用户分析、数据运营等岗位。企业数字化转型需要大量懂数据的管理人才。",
    suit:"对数据驱动商业决策感兴趣。数据分析能力+商业思维并重。",
    emp:"新专业，商业数据分析师是当前热门岗位。",
@@ -1294,7 +919,7 @@ const MAJORS = [
   },
 
   // ========== 公共管理学院 (龙子湖校区/大一江淮) ==========
-  {id:"xingzheng",n:"行政管理",c:"公共管理学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:75,sa:5500,gr:"28%",pr:"3.56%",grd:"考公导向，考研可选",ge:"💻 办公室",icon:"🏛️",
+  {id:"xingzheng",n:"行政管理",c:"公共管理学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:75,sa:5500,gr:"28%",pr:"3.56%",grd:"考公导向，考研可选",ge:"💻 办公室",icon:"🏛️",rk:null,fp:true,rkNote:"国家级一流本科专业 | 考公优势专业",
    career:"国家级一流本科专业。毕业生主要考公务员（各级政府、街道办）、事业单位、国企行政岗、企业行政人事部门。是典型的'考公专业'。",
    suit:"对公共事务和政府管理有兴趣。文字表达能力强（写公文/材料是核心技能）。性格稳重、善于沟通协调。目标明确想考公务员的同学。",
    emp:"公务员/事业编是主要目标。企业行政岗替代性较强。华水行政管理在水利系统内有特色（可考水利部/厅/局）。",
@@ -1304,7 +929,7 @@ const MAJORS = [
    transfer:"若不想考公可转法学（考公更好）或会计学（好找工作）。",
    courses:["行政管理学","公共政策","公共管理","行政法","公务员制度","公文写作","政治学","人力资源管理"]
   },
-  {id:"ldsb",n:"劳动与社会保障",c:"公共管理学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:70,sa:5300,gr:"28%",pr:"3.56%",grd:"考公/考研",ge:"💻 办公室",icon:"🛡️",
+  {id:"ldsb",n:"劳动与社会保障",c:"公共管理学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"管理学学士",cat:"管理学",er:70,sa:5300,gr:"28%",pr:"3.56%",grd:"考公/考研",ge:"💻 办公室",icon:"🛡️",rk:null,fp:false,rkNote:null,
    career:"毕业生进入人社部门（考公务员）、社保中心、保险公司（社保业务）、企业人力资源部。从事社保管理、劳动关系协调、薪酬福利设计。",
    suit:"对社会保障和人力资源管理感兴趣。善于和人打交道。做事规范、有责任感。",
    emp:"人社系统公务员/事业编是主要目标。企业HR岗位替代性强。",
@@ -1316,7 +941,7 @@ const MAJORS = [
   },
 
   // ========== 法学院 ==========
-  {id:"faxue",n:"法学",c:"法学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"法学学士",cat:"法学",er:68,sa:5500,gr:"35%",pr:"3.56%",grd:"法考>考研，但建议双线",ge:"💻 办公室/法庭",icon:"⚖️",
+  {id:"faxue",n:"法学",c:"法学院",ca:"龙子湖校区(大一江淮)",y:"四年",d:"法学学士",cat:"法学",er:68,sa:5500,gr:"35%",pr:"3.56%",grd:"法考>考研，但建议双线",ge:"💻 办公室/法庭",icon:"⚖️",rk:null,fp:false,rkNote:null,
    career:"毕业生方向：①通过法考→律师/公司法务/检察官/法官（需再考公务员）；②未过法考→企业法务助理、行政岗、考研。法考（原司法考试）通过率约15-20%，是法学专业的第一道职业门槛。华水法学在水利法规方向有特色。",
    suit:"记忆力好（法律条文浩如烟海）。逻辑思维严密。文字和口头表达能力强。有正义感和社会责任感。能承受法考备考压力（被称为'天下第一考'）。",
    emp:"法学本科就业存在两极分化：过法考的少数人起薪不错（律所6000-10000元/月），未过法考的大多数人就业困难。建议大三大四全力冲刺法考。",
@@ -1328,7 +953,7 @@ const MAJORS = [
   },
 
   // ========== 外国语学院 (龙子湖校区) ==========
-  {id:"hygj",n:"汉语国际教育",c:"外国语学院",ca:"龙子湖校区",y:"四年",d:"文学学士",cat:"文学",er:68,sa:5200,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 教室/办公室",icon:"📖",
+  {id:"hygj",n:"汉语国际教育",c:"外国语学院",ca:"龙子湖校区",y:"四年",d:"文学学士",cat:"文学",er:68,sa:5200,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 教室/办公室",icon:"📖",rk:null,fp:false,rkNote:null,
    career:"毕业生方向：①孔子学院志愿者→海外汉语教师；②中小学语文教师（需考教资/考编）；③教育培训机构（语文/对外汉语）；④考研深造。孔子学院全球覆盖广，但志愿者项目有年龄限制（一般到30岁）。",
    suit:"喜欢语言教学和跨文化交流。表达能力强。有耐心、喜欢和人互动。对中国文化和语言有热爱。",
    emp:"国内中小学语文教师是最现实出路。海外孔子学院经历有趣但不能终身靠。教培行业受'双减'影响萎缩。",
@@ -1338,7 +963,7 @@ const MAJORS = [
    transfer:"可转英语（就业面更宽）、法学。若想稳定可考教师编。",
    courses:["现代汉语","古代汉语","对外汉语教学法","第二语言习得","中国文化","跨文化交际","英语"]
   },
-  {id:"english",n:"英语",c:"外国语学院",ca:"龙子湖校区",y:"四年",d:"文学学士",cat:"文学",er:70,sa:5500,gr:"28%",pr:"3.56%",grd:"英语+技能，建议考研跨方向",ge:"💻 办公室",icon:"🇬🇧",
+  {id:"english",n:"英语",c:"外国语学院",ca:"龙子湖校区",y:"四年",d:"文学学士",cat:"文学",er:70,sa:5500,gr:"28%",pr:"3.56%",grd:"英语+技能，建议考研跨方向",ge:"💻 办公室",icon:"🇬🇧",rk:null,fp:false,rkNote:null,
    career:"毕业生方向：①英语教师（中小学/培训机构，需教资）；②外贸/跨境电商（英语+商务）；③翻译（笔译/口译，自由职业多）；④外企行政/人事；⑤考研跨方向（英语+法律/金融/新闻更具竞争力）。纯英语专业就业挑战大，建议辅修其他技能。",
    suit:"英语水平好是基础（专四必须过，专八尽量过）。对跨文化交流有兴趣。善于沟通表达。最好再学一个专业技能（外贸/电商/法律/会计等）。",
    emp:"纯英语岗位竞争激烈且薪资一般。但'英语+X'（如英语+国际贸易、英语+法律、英语+跨境电商）的复合型人才有竞争力。跨境电商运营是近年热门方向。",
@@ -1348,7 +973,7 @@ const MAJORS = [
    transfer:"若英语兴趣一般可转汉语国际教育、法学。建议学好英语+辅修方向而非直接转出。",
    courses:["综合英语","英语写作","英语翻译","英美文学","语言学","商务英语","口译","二外"]
   },
-  {id:"eyu",n:"俄语",c:"外国语学院",ca:"龙子湖校区",y:"四年",d:"文学学士",cat:"文学",er:65,sa:5800,gr:"30%",pr:"3.56%",grd:"建议考研或出国",ge:"💻 办公室",icon:"🇷🇺",
+  {id:"eyu",n:"俄语",c:"外国语学院",ca:"龙子湖校区",y:"四年",d:"文学学士",cat:"文学",er:65,sa:5800,gr:"30%",pr:"3.56%",grd:"建议考研或出国",ge:"💻 办公室",icon:"🇷🇺",rk:null,fp:false,rkNote:"乌拉尔学院中俄合作",
    career:"毕业生从事对俄贸易、中俄能源合作项目翻译、旅游、跨境电商（面向俄语市场）、外交/政府机关俄语岗位。中国与俄罗斯/中亚五国的能源、基建合作带来俄语人才需求。华水乌拉尔学院（与俄罗斯乌拉尔联邦大学合作办学）提供了俄语实践环境。",
    suit:"对俄罗斯和中亚文化感兴趣。俄语学习能力好（俄语语法复杂，入门难度大于英语）。能接受对俄业务出差（俄罗斯/中亚）。",
    emp:"中俄能源合作（石油/天然气管道）、'一带一路'中亚方向带来稳定需求。但俄语就业面窄于英语。俄语+工科（水利/能源方向）很有竞争力。",
@@ -1360,7 +985,7 @@ const MAJORS = [
   },
 
   // ========== 艺术设计学院 ==========
-  {id:"hh",n:"绘画",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:65,sa:5000,gr:"25%",pr:"3.56%",grd:"作品>学历，考研可选",ge:"🎨 工作室",icon:"🎨",
+  {id:"hh",n:"绘画",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:65,sa:5000,gr:"25%",pr:"3.56%",grd:"作品>学历，考研可选",ge:"🎨 工作室",icon:"🎨",rk:null,fp:false,rkNote:null,
    career:"毕业生从事美术创作、插画、美术教育（需教资）、画廊/美术馆策展、文化创意产业、游戏原画/影视美术。自由职业比例较高。需要持续创作并积累个人品牌。",
    suit:"热爱美术创作是前提。有一定艺术天赋和审美。能承受不稳定的收入（自由职业初期）。有持续创作的毅力和热情。",
    emp:"就业灵活性大但稳定性弱。自由职业/兼职/创业比例高。美术教育和文创是相对稳定的方向。游戏行业（原画师）是高薪方向。",
@@ -1370,7 +995,7 @@ const MAJORS = [
    transfer:"艺术类专业不能转入非艺术类专业（学校规定）。可在艺术类内部互转（视觉传达、环境设计等）。",
    courses:["素描","色彩","油画/国画","创作","艺术概论","中外美术史","构图学"]
   },
-  {id:"sjcd",n:"视觉传达设计",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:70,sa:5500,gr:"22%",pr:"3.56%",grd:"作品>学历",ge:"💻 办公室/工作室",icon:"🎯",
+  {id:"sjcd",n:"视觉传达设计",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:70,sa:5500,gr:"22%",pr:"3.56%",grd:"作品>学历",ge:"💻 办公室/工作室",icon:"🎯",rk:null,fp:false,rkNote:null,
    career:"毕业生从事平面设计、UI/UX设计（界面设计）、品牌设计、包装设计、电商视觉设计。互联网/电商行业对UI设计师需求大，是艺术类中就业最好的方向之一。",
    suit:"有设计审美和创意能力。熟练使用设计软件（PS/AI/Figma/Sketch）。对用户界面和品牌视觉有感觉。能接受改稿（甲方需求反复调整）。",
    emp:"UI/UX设计是互联网产品必需岗位。品牌和包装设计需求稳定。但入门门槛较低，竞争激烈。作品集决定就业质量。",
@@ -1380,7 +1005,7 @@ const MAJORS = [
    transfer:"艺术类内部可互转。若想更好就业可转环境设计（建筑景观方向与华水工科契合）。",
    courses:["平面设计","UI设计","品牌设计","包装设计","插画","数字媒体","设计史","版式设计"]
   },
-  {id:"hjsj",n:"环境设计",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:70,sa:5500,gr:"22%",pr:"3.56%",grd:"作品>学历",ge:"💻 办公室+现场",icon:"🏡",
+  {id:"hjsj",n:"环境设计",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:70,sa:5500,gr:"22%",pr:"3.56%",grd:"作品>学历",ge:"💻 办公室+现场",icon:"🏡",rk:null,fp:false,rkNote:null,
    career:"毕业生进入室内设计公司、景观设计公司、建筑设计院（室内/景观部）、房地产公司（精装设计）。从事室内设计、景观设计、展示设计。与华水工科（建筑学/风景园林）有一定交叉，可借力水利/土木背景。",
    suit:"空间审美能力强。熟悉设计软件（CAD/3DMax/SketchUp）。对室内装饰材料和景观植物有了解。善于和客户沟通需求。",
    emp:"室内和景观设计市场大但竞争激烈。与华水建筑学/风景园林专业可协同就业。作品集很关键。",
@@ -1390,7 +1015,7 @@ const MAJORS = [
    transfer:"艺术类内部可互转。华水环境设计与风景园林（五年制工学）有交叉。",
    courses:["室内设计","景观设计","展示设计","设计制图","人体工程学","材料与工艺","CAD/3D","设计史"]
   },
-  {id:"ggys",n:"公共艺术",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:65,sa:5000,gr:"25%",pr:"3.56%",grd:"作品>学历",ge:"🎨 工作室+户外",icon:"🗿",
+  {id:"ggys",n:"公共艺术",c:"艺术设计学院",ca:"龙子湖校区",y:"四年",d:"艺术学学士",cat:"艺术学",er:65,sa:5000,gr:"25%",pr:"3.56%",grd:"作品>学历",ge:"🎨 工作室+户外",icon:"🗿",rk:null,fp:false,rkNote:null,
    career:"毕业生从事城市公共艺术设计（雕塑、装置、壁画）、景观艺术、社区营造、展览策划。政府和城市更新项目是主要客户来源。偏前卫和实验性。",
    suit:"对公共空间和艺术介入社会有热情。创作风格偏当代和实验。能接受项目制不稳定的工作模式。",
    emp:"就业面较窄，以城市雕塑和景观艺术为主。政府公共艺术项目是重要渠道。可结合华水水利/景观背景做水文化景观设计。",
@@ -1402,7 +1027,7 @@ const MAJORS = [
   },
 
   // ========== 人文地理类 ==========
-  {id:"rwdl",n:"人文地理与城乡规划",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"理学学士",cat:"理学",er:73,sa:5600,gr:"32%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室+调研",icon:"🌏",
+  {id:"rwdl",n:"人文地理与城乡规划",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"理学学士",cat:"理学",er:73,sa:5600,gr:"32%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室+调研",icon:"🌏",rk:null,fp:false,rkNote:null,
    career:"毕业生进入规划设计院、自然资源部门（考公务员）、地理信息企业、咨询公司。从事国土空间规划、区域发展规划、GIS分析、资源环境评价。",
    suit:"对地理、城市发展和空间规划感兴趣。GIS/数据分析能力好。喜欢宏观和系统性思维。",
    emp:"国土空间规划改革利好。规划设计院和公务员是两大出路。",
@@ -1412,7 +1037,7 @@ const MAJORS = [
    transfer:"可转城乡规划（五年制，设计方向）、GIS。",
    courses:["人文地理学","城市地理学","经济地理学","GIS","城乡规划","区域规划","人口地理"]
   },
-  {id:"dlxxkx",n:"地理信息科学",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"理学学士",cat:"理学",er:76,sa:6500,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室为主",icon:"🗺️💻",
+  {id:"dlxxkx",n:"地理信息科学",c:"水利学院(测绘)",ca:"龙子湖校区(大一江淮)",y:"四年",d:"理学学士",cat:"理学",er:76,sa:6500,gr:"30%",pr:"3.56%",grd:"建议考研",ge:"💻 办公室为主",icon:"🗺️💻",rk:null,fp:false,rkNote:null,
    career:"GIS（地理信息系统）是信息化技术+地理学的交叉。毕业生进入GIS软件企业（ESRI/超图）、测绘/规划院GIS部门、互联网地图公司（高德/百度地图）、智慧城市企业。从事GIS开发、空间数据分析、地图制图。比测绘更喜欢编程的同学的优选。",
    suit:"编程（Python/JavaScript）+地理兴趣并重。喜欢做空间数据可视化和分析。逻辑思考能力强。",
    emp:"GIS在智慧城市、自动驾驶（高精地图）、物流优化等领域应用广泛，需求持续增长。GIS开发工程师薪资在测绘地信领域最高。",
@@ -1424,299 +1049,314 @@ const MAJORS = [
   }
 ];
 
-// ==================== APP LOGIC ====================
+// ============ APP LOGIC ============
+const COLLEGE_ICONS={
+  "水利学院":"🌊","水资源学院":"💧","土木与交通学院":"🏗️",
+  "电气工程学院":"⚡","能源与动力工程学院":"🔥","机械学院":"⚙️",
+  "信息工程学院":"💻","材料学院":"🧪","数学与统计学院":"📐",
+  "管理与经济学院":"📊","公共管理学院":"🏛️","法学院":"⚖️",
+  "外国语学院":"🌐","艺术设计学院":"🎨",
+  "水利学院(测绘)":"🗺️","水利学院(地质)":"⛏️"
+};
 
-// State
-let selectedCategory = null;
-let selectedCollege = null;
-
-// DOM refs
-const searchInput = document.getElementById('searchInput');
-const suggestionsEl = document.getElementById('suggestions');
-const categoryTagsEl = document.getElementById('categoryTags');
-const collegeTagsEl = document.getElementById('collegeTags');
-const statsBar = document.getElementById('statsBar');
-const noResult = document.getElementById('noResult');
-const majorDetail = document.getElementById('majorDetail');
-
-// Get unique categories and colleges
-function getCategories() {
-  const cats = [...new Set(MAJORS.map(m => m.cat))];
-  return ['全部', ...cats.sort()];
-}
-
-function getColleges() {
-  const cols = [...new Set(MAJORS.map(m => m.c))];
-  return ['全部', ...cols.sort()];
-}
-
-// Render filter tags
-function renderCategoryTags() {
-  const cats = getCategories();
-  categoryTagsEl.innerHTML = cats.map(c => {
-    const count = c === '全部' ? MAJORS.length : MAJORS.filter(m => m.cat === c).length;
-    return '<span class="filter-tag' + (selectedCategory === c ? ' active' : '') + (c === '全部' && !selectedCategory ? ' active' : '') +
-      '" data-cat="' + c + '" onclick="selectCategory(\'' + c + '\')">' + c + '<span class="count">' + count + '</span></span>';
-  }).join('');
-}
-
-function renderCollegeTags() {
-  const cols = getColleges();
-  collegeTagsEl.innerHTML = cols.map(c => {
-    const count = c === '全部' ? MAJORS.length : MAJORS.filter(m => m.c === c).length;
-    return '<span class="college-tag' + (selectedCollege === c ? ' active' : '') + (c === '全部' && !selectedCollege ? ' active' : '') +
-      '" data-col="' + c + '" onclick="selectCollege(\'' + c + '\')">' + c + '<span class="count">' + count + '</span></span>';
-  }).join('');
-}
-
-// Filter majors
-function getFilteredMajors() {
-  var filtered = MAJORS;
-  if (selectedCategory && selectedCategory !== '全部') {
-    filtered = filtered.filter(function(m) { return m.cat === selectedCategory; });
-  }
-  if (selectedCollege && selectedCollege !== '全部') {
-    filtered = filtered.filter(function(m) { return m.c === selectedCollege; });
-  }
-  return filtered;
-}
-
-// Select category
-function selectCategory(cat) {
-  if (cat === '全部') cat = null;
-  selectedCategory = cat;
-  renderCategoryTags();
-  updateStats();
-  clearSearch();
-}
-
-// Select college
-function selectCollege(col) {
-  if (col === '全部') col = null;
-  selectedCollege = col;
-  renderCollegeTags();
-  updateStats();
-  clearSearch();
-}
-
-// Clear search
-function clearSearch() {
-  searchInput.value = '';
-  suggestionsEl.classList.remove('show');
-  hideDetail();
-}
-
-// Update stats
-function updateStats() {
-  var filtered = getFilteredMajors();
-  var total = MAJORS.length;
-  var showing = filtered.length;
-  if (showing === 0) {
-    statsBar.innerHTML = '<div class="stat-item"><div class="num">' + total + '</div><div class="lbl">全校本科专业</div></div><div class="stat-item"><div class="num">0</div><div class="lbl">当前筛选结果</div></div>';
-    return;
-  }
-  var avgSalary = Math.round(filtered.reduce(function(s, m) { return s + m.sa; }, 0) / showing);
-  var avgER = Math.round(filtered.reduce(function(s, m) { return s + m.er; }, 0) / showing);
-
-  statsBar.innerHTML =
-    '<div class="stat-item"><div class="num">' + total + '</div><div class="lbl">全校本科专业</div></div>' +
-    '<div class="stat-item"><div class="num">' + showing + '</div><div class="lbl">当前筛选结果</div></div>' +
-    '<div class="stat-item"><div class="num">&yen;' + avgSalary + '</div><div class="lbl">平均起薪(元/月)</div></div>' +
-    '<div class="stat-item"><div class="num">' + avgER + '%</div><div class="lbl">平均就业落实率</div></div>';
-}
-
-// Search handler
-searchInput.addEventListener('input', function() {
-  var query = this.value.trim().toLowerCase();
-  if (!query) {
-    suggestionsEl.classList.remove('show');
-    return;
-  }
-
-  var filtered = getFilteredMajors();
-  var matches = filtered.filter(function(m) {
-    return m.n.indexOf(query) !== -1 ||
-           m.c.indexOf(query) !== -1 ||
-           m.cat.indexOf(query) !== -1 ||
-           m.career.indexOf(query) !== -1;
+function getColleges(){
+  const map=new Map();
+  MAJORS.forEach(m=>{
+    if(!map.has(m.c)) map.set(m.c,{name:m.c,icon:COLLEGE_ICONS[m.c]||"📚",majors:[],flagshipCount:0});
+    const col=map.get(m.c);
+    col.majors.push(m);
+    if(m.fp) col.flagshipCount++;
   });
+  return Array.from(map.values());
+}
 
-  if (matches.length === 0) {
-    suggestionsEl.innerHTML = '<div class="suggestion-item" style="color:var(--text-muted);justify-content:center;">未找到匹配的专业</div>';
-    suggestionsEl.classList.add('show');
-    return;
+let openCollege=null;
+let activeMajorId=null;
+
+function renderSidebar(){
+  const cols=getColleges();
+  document.getElementById('tm').textContent='共'+MAJORS.length+'个专业';
+  let html='';
+  cols.forEach(col=>{
+    const hasF=col.flagshipCount>0;
+    html+='<div class="college-item">';
+    html+='<div class="college-header" onclick="toggleCollege(this,\''+col.name+'\')" data-col="'+col.name+'">';
+    html+='<div class="cn"><span>'+col.icon+' '+col.name+'</span></div>';
+    html+='<div class="cm">';
+    if(hasF) html+='<span class="fd" title="含王牌专业"></span>';
+    html+='<span class="mc">'+col.majors.length+'个</span>';
+    html+='<span class="ar">▼</span></div></div>';
+    html+='<div class="major-list" id="ml-'+col.name.replace(/[^a-zA-Z一-龥]/g,'')+'">';
+    col.majors.forEach(m=>{
+      html+='<div class="major-item" data-id="'+m.id+'" onclick="selectMajor(\''+m.id+'\')">';
+      html+='<span class="mn">'+m.icon+' '+m.n+'</span>';
+      html+='<span class="mb">';
+      if(m.fp) html+='<span class="mrb gold" title="王牌专业">王牌</span>';
+      if(m.rk&&m.rk<=3) html+='<span class="mrb yellow" title="全国第'+m.rk+'">TOP'+m.rk+'</span>';
+      else if(m.rk&&m.rk<=10) html+='<span class="mrb orange" title="全国第'+m.rk+'">#'+m.rk+'</span>';
+      else if(m.rk) html+='<span class="mrb blue" title="全国第'+m.rk+'">#'+m.rk+'</span>';
+      html+='</span></div>';
+    });
+    html+='</div></div>';
+  });
+  document.getElementById('cl').innerHTML=html;
+}
+
+function toggleCollege(header,colName){
+  const listId='ml-'+colName.replace(/[^a-zA-Z一-龥]/g,'');
+  const list=document.getElementById(listId);
+  if(!list) return;
+  const isOpen=list.classList.contains('show');
+  // Close all
+  document.querySelectorAll('.major-list.show').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.college-header.open').forEach(el=>el.classList.remove('open'));
+  if(!isOpen){
+    list.classList.add('show');
+    header.classList.add('open');
   }
-
-  suggestionsEl.innerHTML = matches.slice(0, 15).map(function(m, i) {
-    return '<div class="suggestion-item" data-id="' + m.id + '" data-index="' + i + '" onmousedown="selectMajor(\'' + m.id + '\')">' +
-      '<span class="name">' + m.icon + ' ' + m.n + '</span>' +
-      '<span class="tag">' + m.c + '</span></div>';
-  }).join('');
-  suggestionsEl.classList.add('show');
-});
-
-// Keyboard navigation
-var activeIndex = -1;
-searchInput.addEventListener('keydown', function(e) {
-  var items = suggestionsEl.querySelectorAll('.suggestion-item');
-  if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    activeIndex = Math.min(activeIndex + 1, items.length - 1);
-    updateActiveItem(items);
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    activeIndex = Math.max(activeIndex - 1, 0);
-    updateActiveItem(items);
-  } else if (e.key === 'Enter') {
-    e.preventDefault();
-    if (activeIndex >= 0 && items[activeIndex]) {
-      items[activeIndex].click();
-    }
+  // On mobile, scroll to college
+  if(window.innerWidth<=900){
+    header.scrollIntoView({behavior:'smooth'});
   }
-});
+}
 
-function updateActiveItem(items) {
-  items.forEach(function(item, i) {
-    if (i === activeIndex) {
-      item.classList.add('active');
-      item.scrollIntoView({ block: 'nearest' });
-    } else {
-      item.classList.remove('active');
+function selectMajor(id){
+  const m=MAJORS.find(x=>x.id===id);
+  if(!m) return;
+  activeMajorId=id;
+  // Update sidebar active
+  document.querySelectorAll('.major-item.active').forEach(el=>el.classList.remove('active'));
+  const item=document.querySelector('.major-item[data-id="'+id+'"]');
+  if(item) item.classList.add('active');
+  // Show detail
+  document.getElementById('wv').style.display='none';
+  const dv=document.getElementById('dv');
+  dv.classList.add('show');
+  renderDetail(m);
+  dv.scrollIntoView({behavior:'smooth',block:'start'});
+  window.location.hash=m.id;
+}
+
+function showWelcome(){
+  document.getElementById('wv').style.display='';
+  document.getElementById('dv').classList.remove('show');
+  activeMajorId=null;
+  document.querySelectorAll('.major-item.active').forEach(el=>el.classList.remove('active'));
+  window.location.hash='';
+}
+
+function renderCollegeGrid(){
+  const cols=getColleges();
+  let html='';
+  cols.forEach(col=>{
+    const sample=col.majors.slice(0,3).map(m=>m.icon+m.n).join(' ');
+    html+='<div class="college-card" onclick="scrollToCollege(\''+col.name+'\')">';
+    html+='<div class="cci">'+col.icon+'</div>';
+    html+='<div class="ccn">'+col.name+'</div>';
+    html+='<div class="ccd">'+col.majors.length+'个专业 · '+sample+'...</div>';
+    if(col.flagshipCount>0) html+='<div class="ccf">⭐ '+col.flagshipCount+'个王牌专业</div>';
+    html+='</div>';
+  });
+  document.getElementById('cg').innerHTML=html;
+}
+
+function scrollToCollege(colName){
+  const listId='ml-'+colName.replace(/[^a-zA-Z一-龥]/g,'');
+  const list=document.getElementById(listId);
+  if(!list) return;
+  // Close all, then open this one
+  document.querySelectorAll('.major-list.show').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.college-header.open').forEach(el=>el.classList.remove('open'));
+  list.classList.add('show');
+  const header=list.previousElementSibling;
+  if(header) header.classList.add('open');
+  list.scrollIntoView({behavior:'smooth'});
+  // On mobile, open sidebar
+  if(window.innerWidth<=900){
+    document.getElementById('sidebar').classList.add('open');
+  }
+}
+
+function quickFilter(){
+  const q=(document.getElementById('qs').value||'').trim().toLowerCase();
+  document.querySelectorAll('.college-item').forEach(item=>{
+    if(!q){item.style.display='';return;}
+    const majors=item.querySelectorAll('.major-item');
+    let hasVisible=false;
+    majors.forEach(mi=>{
+      const txt=mi.textContent.toLowerCase();
+      if(txt.includes(q)){mi.style.display='';hasVisible=true;}
+      else mi.style.display='none';
+    });
+    item.style.display=hasVisible?'':'none';
+    if(hasVisible&&q){
+      const list=item.querySelector('.major-list');
+      if(list) list.classList.add('show');
+      const header=item.querySelector('.college-header');
+      if(header) header.classList.add('open');
     }
   });
 }
 
-// Hide suggestions on blur
-searchInput.addEventListener('blur', function() {
-  setTimeout(function() { suggestionsEl.classList.remove('show'); }, 150);
-});
-
-// Select major by id
-function selectMajor(id) {
-  var major = MAJORS.find(function(m) { return m.id === id; });
-  if (!major) return;
-
-  searchInput.value = major.n;
-  suggestionsEl.classList.remove('show');
-  activeIndex = -1;
-  renderMajorDetail(major);
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
 }
 
-// Render major detail
-function renderMajorDetail(m) {
-  noResult.style.display = 'none';
-  majorDetail.classList.add('show');
+// ============ Detail Render ============
+function renderDetail(m){
+  const erL=m.er>=82?'hi':m.er>=75?'mid':'lo';
+  const erC=m.er>=82?'var(--success)':m.er>=75?'var(--warning)':'var(--accent)';
+  const saL=m.sa>=7000?'hi':m.sa>=6000?'mid':'lo';
+  const saC=m.sa>=7000?'var(--success)':m.sa>=6000?'var(--warning)':'var(--accent)';
+  let gb='';
+  if(m.grd.indexOf('强烈')!==-1) gb='<span class="grad-badge must">📚 强烈建议考研</span>';
+  else if(m.grd.indexOf('建议')!==-1) gb='<span class="grad-badge rec">📖 建议考研</span>';
+  else gb='<span class="grad-badge opt">💼 本科即可就业</span>';
 
-  var erLevel = m.er >= 82 ? 'high' : m.er >= 75 ? 'medium' : 'low';
-  var erColor = m.er >= 82 ? 'var(--success)' : m.er >= 75 ? 'var(--warning)' : 'var(--accent)';
-  var salaryLevel = m.sa >= 7000 ? 'high' : m.sa >= 6000 ? 'medium' : 'low';
-  var salaryColor = m.sa >= 7000 ? 'var(--success)' : m.sa >= 6000 ? 'var(--warning)' : 'var(--accent)';
+  // Rank banner
+  let rankHTML='';
+  if(m.fp||m.rk){
+    rankHTML+='<div class="rank-banner">';
+    if(m.fp){
+      rankHTML+='<div class="rank-card flagship-card">';
+      rankHTML+='<div class="rn gold">🏆</div>';
+      rankHTML+='<div class="rl">华水王牌专业</div>';
+      rankHTML+='<div class="rd">'+((m.rkNote||'').split('|')[0]||'重点建设专业')+'</div>';
+      rankHTML+='</div>';
+    }
+    if(m.rk){
+      rankHTML+='<div class="rank-card rank-card-normal">';
+      rankHTML+='<div class="rn blue">第'+m.rk+'名</div>';
+      rankHTML+='<div class="rl">全国专业排名</div>';
+      rankHTML+='<div class="rd">'+((m.rkNote||'').split('|').slice(1).join('|')||'')+'</div>';
+      rankHTML+='</div>';
+    }else if(m.rkNote){
+      rankHTML+='<div class="rank-card rank-card-normal">';
+      rankHTML+='<div class="rn blue" style="font-size:18px">📋</div>';
+      rankHTML+='<div class="rl">专业特色</div>';
+      rankHTML+='<div class="rd">'+m.rkNote+'</div>';
+      rankHTML+='</div>';
+    }
+    rankHTML+='</div>';
+  }
 
-  var gradBadge = '';
-  if (m.grd.indexOf('强烈') !== -1) gradBadge = '<span class="rec-badge yes">📚 强烈建议考研</span>';
-  else if (m.grd.indexOf('建议') !== -1) gradBadge = '<span class="rec-badge maybe">📖 建议考研</span>';
-  else gradBadge = '<span class="rec-badge no">💼 本科即可就业</span>';
+  // Work environment visualization
+  function parseWorkEnv(ge){
+    const g=ge||'';
+    let indoor=50,outdoor=30,field=20;
+    if(g.indexOf('室内为主')!==-1||g.indexOf('办公室为主')!==-1){indoor=80;outdoor=10;field=10}
+    else if(g.indexOf('办公室')!==-1&&g.indexOf('工地')!==-1){indoor=50;outdoor=30;field=20}
+    else if(g.indexOf('工地为主')!==-1){indoor=10;outdoor=70;field=20}
+    else if(g.indexOf('野外')!==-1){indoor=10;outdoor=30;field=60}
+    else if(g.indexOf('实验室')!==-1){indoor=70;outdoor=10;field=20}
+    else if(g.indexOf('工厂')!==-1){indoor=30;outdoor=10;field=60}
+    else if(g.indexOf('电厂')!==-1||g.indexOf('核电站')!==-1){indoor=40;outdoor=10;field=50}
+    return [
+      {label:'室内/办公室',icon:'🏢',val:indoor,cls:'indoor'},
+      {label:'户外/现场',icon:'🏗️',val:outdoor,cls:'outdoor'},
+      {label:'野外/出差',icon:'🌍',val:field,cls:'field'}
+    ];
+  }
+  const wvItems=parseWorkEnv(m.ge);
 
-  // Build hero section
-  var html = '<div class="major-hero">' +
-    '<div class="hero-top">' +
-    '<div class="hero-icon">' + m.icon + '</div>' +
-    '<div class="hero-info">' +
-    '<div class="hero-name">' + m.n + '</div>' +
-    '<div class="hero-tags">' +
-    '<span class="hero-tag college">🏛️ ' + m.c + '</span>' +
-    '<span class="hero-tag campus">📍 ' + m.ca + '</span>' +
-    '<span class="hero-tag degree">🎓 ' + m.d + '</span>' +
-    '<span class="hero-tag years">⏱️ ' + m.y + '</span>' +
-    '<span class="hero-tag category">📂 ' + m.cat + '</span>' +
-    '</div></div></div>' +
-    '<div class="score-row">' +
-    '<div class="score-item"><div class="score-label">📈 2024届就业落实率</div>' +
-    '<div class="score-value" style="color:' + erColor + '">' + m.er + '%</div>' +
-    '<div class="score-bar-wrap"><div class="score-bar-fill ' + erLevel + '" style="width:' + m.er + '%"></div></div>' +
-    '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">全校平均76.6%</div></div>' +
-    '<div class="score-item"><div class="score-label">💰 平均起薪(元/月)</div>' +
-    '<div class="score-value" style="color:' + salaryColor + '">&yen;' + m.sa + '</div>' +
-    '<div class="score-bar-wrap"><div class="score-bar-fill ' + salaryLevel + '" style="width:' + Math.min(m.sa/90,100) + '%"></div></div>' +
-    '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">全校平均&yen;6245</div></div>' +
-    '<div class="score-item"><div class="score-label">🎓 升学深造率</div>' +
-    '<div class="score-value" style="color:var(--primary)">' + m.gr + '</div>' +
-    '<div class="score-bar-wrap"><div class="score-bar-fill medium" style="width:' + parseInt(m.gr) + '%"></div></div>' +
-    '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">保研率' + m.pr + '</div></div>' +
-    '</div></div>';
+  let html='';
+  html+='<button class="detail-back" onclick="showWelcome()">← 返回学院列表</button>';
+  html+='<div class="major-hero">';
+  html+='<div class="hero-top">';
+  html+='<div class="hero-icon">'+m.icon+'</div>';
+  html+='<div class="hero-info">';
+  html+='<div class="hero-name">'+m.n;
+  if(m.fp) html+=' <span class="badge-flagship">🏆 王牌专业</span>';
+  html+='</div>';
+  html+='<div class="hero-college">'+m.c+' · '+m.ca+'</div>';
+  html+='<div class="hero-tags">';
+  html+='<span class="hero-tag college">🏛️ '+m.c+'</span>';
+  html+='<span class="hero-tag campus">📍 '+m.ca+'</span>';
+  html+='<span class="hero-tag degree">🎓 '+m.d+'</span>';
+  html+='<span class="hero-tag years">⏱️ '+m.y+'</span>';
+  html+='<span class="hero-tag category">📂 '+m.cat+'</span>';
+  html+='</div></div></div>';
+  html+=rankHTML;
+  html+='<div class="score-row">';
+  html+='<div class="score-item"><div class="sl">📈 2024届就业落实率</div>';
+  html+='<div class="sv" style="color:'+erC+'">'+m.er+'%</div>';
+  html+='<div class="sb"><div class="sbf '+erL+'" style="width:'+m.er+'%"></div></div>';
+  html+='<div style="font-size:11px;color:var(--text-muted);margin-top:4px">全校平均76.6%</div></div>';
+  html+='<div class="score-item"><div class="sl">💰 平均起薪(元/月)</div>';
+  html+='<div class="sv" style="color:'+saC+'">&yen;'+m.sa+'</div>';
+  html+='<div class="sb"><div class="sbf '+saL+'" style="width:'+Math.min(m.sa/90,100)+'%"></div></div>';
+  html+='<div style="font-size:11px;color:var(--text-muted);margin-top:4px">全校平均&yen;6245</div></div>';
+  html+='<div class="score-item"><div class="sl">🎓 升学深造率</div>';
+  html+='<div class="sv" style="color:var(--primary)">'+m.gr+'</div>';
+  html+='<div class="sb"><div class="sbf mid" style="width:'+parseInt(m.gr)+'%"></div></div>';
+  html+='<div style="font-size:11px;color:var(--text-muted);margin-top:4px">保研率'+m.pr+'</div></div>';
+  html+='</div></div>';
 
   // Info cards
-  html += '<div class="info-cards">' +
-    '<div class="info-card"><div class="card-icon blue">🎯</div><h3>将来能做什么</h3><p>' + m.career + '</p></div>' +
-    '<div class="info-card"><div class="card-icon green">🧠</div><h3>适合什么样的你</h3><p>' + m.suit + '</p></div>' +
-    '</div>' +
-    '<div class="info-cards">' +
-    '<div class="info-card"><div class="card-icon orange">📈</div><h3>就业前景</h3><p>' + m.emp + '</p></div>' +
-    '<div class="info-card"><div class="card-icon teal">💰</div><h3>薪资水平</h3><p>' + m.salary + '</p></div>' +
-    '</div>' +
-    '<div class="info-cards">' +
-    '<div class="info-card"><div class="card-icon purple">🏢</div><h3>工作环境 <span style="font-size:12px;font-weight:400;color:var(--text-muted);">' + m.ge + '</span></h3><p>' + m.workEnv + '</p></div>' +
-    '<div class="info-card"><div class="card-icon red">🎓</div><h3>要不要考研 ' + gradBadge + '</h3><p>' + m.grad + '</p></div>' +
-    '</div>' +
-    '<div class="info-cards">' +
-    '<div class="info-card full-width"><div class="card-icon orange">🔄</div><h3>转专业建议</h3><p>' + m.transfer + '</p></div>' +
-    '</div>' +
-    '<div class="info-cards">' +
-    '<div class="info-card full-width"><div class="card-icon teal">📚</div><h3>主要课程</h3>' +
-    '<div class="course-tags">' + m.courses.map(function(co) { return '<span class="course-tag">' + co + '</span>'; }).join('') + '</div>' +
-    '</div></div>';
+  html+='<div class="info-cards">';
+  html+='<div class="info-card"><div class="ci blue">🎯</div><h3>将来能做什么</h3><p>'+m.career+'</p></div>';
+  html+='<div class="info-card"><div class="ci green">🧠</div><h3>适合什么样的你</h3><p>'+m.suit+'</p></div>';
+  html+='</div>';
 
-  majorDetail.innerHTML = html;
-  majorDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Work environment with visualization
+  html+='<div class="info-cards">';
+  html+='<div class="info-card"><div class="ci purple">🏢</div><h3>工作环境 <span style="font-size:12px;font-weight:400;color:var(--text-muted)">'+m.ge+'</span></h3>';
+  html+='<div class="work-viz">';
+  wvItems.forEach(w=>{
+    html+='<div class="work-viz-item"><div class="wvi">'+w.icon+'</div><div class="wvl">'+w.label+'</div>';
+    html+='<div class="wvb"><div class="wvf '+w.cls+'" style="width:'+w.val+'%"></div></div>';
+    html+='<div style="font-size:10px;color:var(--text-muted);margin-top:2px">'+w.val+'%</div></div>';
+  });
+  html+='</div><p style="margin-top:8px">'+m.workEnv+'</p></div>';
+  html+='<div class="info-card"><div class="ci orange">📈</div><h3>就业市场分析</h3><p>'+m.emp+'</p></div>';
+  html+='</div>';
+
+  html+='<div class="info-cards">';
+  html+='<div class="info-card"><div class="ci teal">💰</div><h3>薪资成长路径</h3><p>'+m.salary+'</p></div>';
+  html+='<div class="info-card"><div class="ci red">🎓</div><h3>要不要考研 '+gb+'</h3><p>'+m.grad+'</p></div>';
+  html+='</div>';
+
+  html+='<div class="info-cards">';
+  html+='<div class="info-card fw"><div class="ci orange">🔄</div><h3>转专业建议</h3><p>'+m.transfer+'</p></div>';
+  html+='</div>';
+
+  html+='<div class="info-cards">';
+  html+='<div class="info-card fw"><div class="ci teal">📚</div><h3>主要课程</h3>';
+  html+='<div class="course-tags">'+m.courses.map(c=>'<span class="course-tag">'+c+'</span>').join('')+'</div>';
+  html+='</div></div>';
+
+  document.getElementById('dv').innerHTML=html;
 }
 
-function hideDetail() {
-  majorDetail.classList.remove('show');
-  noResult.style.display = '';
+function sharePage(){
+  const url=window.location.href;
+  if(navigator.share){navigator.share({title:'华水专业认知助手',text:'来了解你的专业吧！',url})}
+  else if(navigator.clipboard){navigator.clipboard.writeText(url).then(()=>alert('链接已复制！'))}
+  else prompt('复制链接分享：',url);
 }
 
-// Share function
-function sharePage() {
-  var url = window.location.href;
-  if (navigator.share) {
-    navigator.share({ title: '华水专业认知助手', text: '来了解你的专业吧！', url: url });
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(function() { alert('链接已复制到剪贴板！'); });
-  } else {
-    prompt('复制此链接分享给同学：', url);
+function handleHash(){
+  const hash=window.location.hash.slice(1);
+  if(hash){
+    const m=MAJORS.find(x=>x.id===hash||x.n===decodeURIComponent(hash));
+    if(m) selectMajor(m.id);
   }
 }
 
-// URL hash handling
-function handleHash() {
-  var hash = window.location.hash.slice(1);
-  if (hash) {
-    var major = MAJORS.find(function(m) { return m.id === hash || m.n === decodeURIComponent(hash); });
-    if (major) selectMajor(major.id);
-  }
-}
+window.addEventListener('hashchange',handleHash);
 
-window.addEventListener('hashchange', handleHash);
-
-// Initialize
-function init() {
-  renderCategoryTags();
-  renderCollegeTags();
-  updateStats();
-  handleHash();
-}
-
-init();
-
-// Click outside to close suggestions
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.search-input-wrap')) {
-    suggestionsEl.classList.remove('show');
+// Click outside sidebar on mobile
+document.addEventListener('click',function(e){
+  if(window.innerWidth<=900&&!e.target.closest('.sidebar')&&!e.target.closest('.sidebar-toggle')){
+    document.getElementById('sidebar').classList.remove('open');
   }
 });
 
-console.log('🌊 华水专业认知助手已就绪 | 共收录 ' + MAJORS.length + ' 个本科专业');
-console.log('📚 华水小鹏制作 · 内容仅供参考');
+// Init
+renderSidebar();
+renderCollegeGrid();
+handleHash();
+console.log('🌊 华水专业认知助手已就绪 | 共收录 '+MAJORS.length+' 个本科专业 | '+MAJORS.filter(m=>m.fp).length+' 个王牌专业');
 </script>
 </body>
 </html>
